@@ -1,0 +1,126 @@
+/* Stile per i pulsanti meteo */
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+    color: #333;
+    padding: 20px;
+    margin: 0;
+    min-height: 100vh;
+}
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.weather-btn {
+    width: 80px;
+    height: 80px;
+    font-size: 32px;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    background-color: #f9f9f9;
+    color: #555;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.weather-btn:hover {
+    background-color: #e9ecef;
+    transform: scale(1.1);
+}
+
+.weather-btn.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #0056b3;
+    transform: scale(1.1);
+}
+
+.weather-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: left;
+    margin-bottom: 20px;
+}
+
+.weather-btn.selected {
+    background-color: #007bff;
+    color: white;
+    border-color: #0056b3;
+    transform: scale(1.1);
+}
+
+.header {
+    display: flex;
+    justify-content: center; /* Centra il testo */
+    align-items: center;
+    position: relative; /* Permette di posizionare il dropdown */
+}
+.dropdown {
+    position: absolute;
+    right: 20px; /* Sposta il menu a destra */
+}
+.btn-menu {
+    position: absolute;
+    left: 20px; /* Sposta il menu a destra */
+}
+.dropdown-menu {
+    width: 280px; /* Imposta larghezza maggiore */
+    padding: 15px;
+}
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.user-info img {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+}
+.user-email {
+    font-size: 14px;
+    color: gray;
+}
+.accuracy-bar {
+    height: 10px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 5px;
+}
+.accuracy-fill {
+    height: 100%;
+    background-color: #007bff;
+}
+@media (max-width: 768px) {  
+    .header {
+        flex-direction: column; /* Dispone il testo e il pulsante in colonna */
+        align-items: center; /* Centra il contenuto */
+        text-align: center;
+    }
+
+    .dropdown {
+        position: static; /* Rimuove il posizionamento assoluto */
+        margin-top: 15px; /* Aggiunge spazio tra il testo e il pulsante */
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .btn-menu {
+        position: static; /* Rimuove il posizionamento assoluto */
+        margin-top: 15px; /* Aggiunge spazio tra il testo e il pulsante */
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+}
