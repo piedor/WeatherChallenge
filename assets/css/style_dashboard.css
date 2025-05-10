@@ -1,0 +1,66 @@
+.header {
+    display: flex;
+    justify-content: center; /* Centra il testo */
+    align-items: center;
+    position: relative; /* Permette di posizionare il dropdown */
+}
+.dropdown {
+    position: absolute;
+    right: 20px; /* Sposta il menu a destra */
+}
+.btn-menu {
+    position: absolute;
+    left: 20px; /* Sposta il menu a destra */
+}
+.dropdown-menu {
+    width: 280px; /* Imposta larghezza maggiore */
+    padding: 15px;
+}
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.user-info img {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+}
+.user-email {
+    font-size: 14px;
+    color: gray;
+}
+.accuracy-bar {
+    height: 10px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 5px;
+}
+.accuracy-fill {
+    height: 100%;
+    background-color: #007bff;
+}
+@media (max-width: 768px) {  
+    .header {
+        flex-direction: column; /* Dispone il testo e il pulsante in colonna */
+        align-items: center; /* Centra il contenuto */
+        text-align: center;
+    }
+
+    .dropdown {
+        position: static; /* Rimuove il posizionamento assoluto */
+        margin-top: 15px; /* Aggiunge spazio tra il testo e il pulsante */
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .btn-menu {
+        position: static; /* Rimuove il posizionamento assoluto */
+        margin-top: 15px; /* Aggiunge spazio tra il testo e il pulsante */
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+}
