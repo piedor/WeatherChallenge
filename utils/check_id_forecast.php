@@ -4,11 +4,11 @@
     
     $id = $_GET['id'] ?? null;
     if (!$id) {
-        die("ID previsione non valido.");
+        redirectToErrorPage(0, "ID previsione non valido.");
     }
 
     // Recupera la previsione dell'utente
-    $query = "SELECT user_id, date, temp_max, temp_min, morning_desc, afternoon_desc, weather_accuracy, temp_accuracy, accuracy, note FROM forecasts WHERE id = ?";
+    $query = "SELECT * FROM forecasts WHERE id = ?";
     $stmt = $__con->prepare($query);
     $stmt->bind_param("i", $id);
     $stmt->execute();
