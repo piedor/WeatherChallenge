@@ -132,6 +132,12 @@
                     <h3 class="text-success">Accuratezza del <?= htmlspecialchars($forecast['accuracy']) ?>%</h3>
                     <p><strong>Accuratezza temperatura giornaliera:</strong> <?= htmlspecialchars($forecast['temp_accuracy']) ?>%</p>
                     <p><strong>Accuratezza condizioni meteorologiche:</strong> <?= htmlspecialchars($forecast['weather_accuracy']) ?>%</p>
+
+                    <?php if (isset($role) && ($role === 'professor' || $role === 'admin') && $user_id !== $forecast['user_id']): ?>
+                        <a href="report_plagiarism.php?forecast_id=<?= $forecast['id'] ?>" class="btn btn-danger mt-3">
+                            🚨 Segnala Plagio
+                        </a>
+                    <?php endif; ?>
                 
                     <button class="btn btn-outline-primary mt-3" type="button" data-bs-toggle="collapse" data-bs-target="#dettagliCalcolo">
                         Mostra Dettagli Calcolo 🔍
