@@ -54,7 +54,31 @@
     <?php endif; ?>
     
     <div class="container mt-4">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h2>Segnalazione Previsione Sospetta</h2>
+                <p>Stai segnalando una previsione inserita da <strong><?= $fullNameForecaster ?></strong>.</p>
+            </div>
         
+            <div class="card-body">
+                <p><strong>Data:</strong> <?= htmlspecialchars(date("d/m/Y", strtotime($forecast['date']))) ?></p>
+                <p class="text-danger"><strong>Temperatura massima prevista:</strong> <?= htmlspecialchars($forecast['temp_max']) ?>°C</p>
+                <p class="text-primary"><strong>Temperatura minima prevista:</strong> <?= htmlspecialchars($forecast['temp_min']) ?>°C</p>
+                <p><strong>Mattina:</strong> <?= htmlspecialchars($forecast['morning_desc']) ?> <?= $weatherDescToEmoji[$forecast['morning_desc']] ?></p>
+                <p><strong>Pomeriggio:</strong> <?= htmlspecialchars($forecast['afternoon_desc']) ?> <?= $weatherDescToEmoji[$forecast['afternoon_desc']] ?></p>
+                <p><strong>Note:</strong> <?= $forecast['note'] === "" ? "Nessuna nota" : htmlspecialchars($forecast['note']) ?></p>
+            </div>
+        </div>
+
+        <form action="submit_report.php" method="POST">
+            <input type="hidden" name="id" value="<?= htmlspecialchars($forecast['id']) ?>">
+            <div class="form-group">
+                <label for="comment">Motivazione della segnalazione</label>
+                <textarea name="comment" id="comment" class="form-control" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-danger mt-3">Invia Segnalazione</button>
+            <a href="students_forecasts.php" class="btn btn-secondary mt-3">Annulla</a>
+        </form>
     </div>
     <script src="./assets/js/main.js"></script>
 </body>
