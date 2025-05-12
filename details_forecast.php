@@ -1,5 +1,5 @@
 <?php
-    // Include il file per il controllo della sessione e che la previsione appartenga all'utente corrente
+    // Include il file per il controllo della sessione e che la previsione appartenga all'utente corrente oppure di uno studente e l'account sia di un professore
     include 'utils/check_id_forecast.php';
 
     $date = $forecast['date'];
@@ -134,7 +134,7 @@
                     <p><strong>Accuratezza condizioni meteorologiche:</strong> <?= htmlspecialchars($forecast['weather_accuracy']) ?>%</p>
 
                     <?php if (isset($role) && ($role === 'professor' || $role === 'admin') && $user_id !== $forecast['user_id']): ?>
-                        <a href="report_plagiarism.php?forecast_id=<?= $forecast['id'] ?>" class="btn btn-danger mt-3">
+                        <a href="report_plagiarism.php?id=<?= $forecast['id'] ?>" class="btn btn-danger mt-3">
                             🚨 Segnala Plagio
                         </a>
                     <?php endif; ?>
