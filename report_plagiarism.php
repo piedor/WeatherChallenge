@@ -4,7 +4,7 @@
 
     // Solo i professori e admin possono accedere
     if ($role !== 'professor' && $role !== 'admin') {
-        header('Location: index.php');
+        redirectToErrorPage(403);
         exit;
     }
 

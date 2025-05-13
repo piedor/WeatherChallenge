@@ -6,6 +6,7 @@
         "password": "Prova2025!",
         "database": "stazione_meteo"
     },
+    "baseUrl": "/StazioneMeteo/dashboard",
     "debugError": 1,
     "weatherDescToEmoji": {
         "Soleggiato": "☀️",
