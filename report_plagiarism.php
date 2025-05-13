@@ -70,7 +70,7 @@
             </div>
         </div>
 
-        <form action="submit_report.php" method="POST">
+        <form action="api/submit_plagiarism_report.php" method="POST">
             <input type="hidden" name="id" value="<?= htmlspecialchars($forecast['id']) ?>">
             <div class="form-group">
                 <label for="comment">Motivazione della segnalazione</label>
