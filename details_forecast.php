@@ -134,9 +134,25 @@
                     <p><strong>Accuratezza condizioni meteorologiche:</strong> <?= htmlspecialchars($forecast['weather_accuracy']) ?>%</p>
 
                     <?php if (isset($role) && ($role === 'professor' || $role === 'admin') && $user_id !== $forecast['user_id']): ?>
-                        <a href="report_plagiarism.php?id=<?= $forecast['id'] ?>" class="btn btn-danger mt-3">
-                            🚨 Segnala Plagio
-                        </a>
+                        <?php
+                            // Controlla se la previsione è già stata segnalata da questo professore
+                            $query = "SELECT COUNT(*) FROM plagiarism_reports WHERE forecast_id = ? AND reported_by = ?";
+                            $stmt = $__con->prepare($query);
+                            $stmt->bind_param("ii", $forecast['id'], $user_id);
+                            $stmt->execute();
+                            $stmt->bind_result($alreadyReported);
+                            $stmt->fetch();
+                            $stmt->close();
+                        ?>
+                        <?php if ($alreadyReported > 0): ?>
+                            <button class="btn btn-success mt-3" disabled>
+                                ✅ Segnalato
+                            </button>
+                        <?php else: ?>
+                            <a href="report_plagiarism.php?id=<?= $forecast['id'] ?>" class="btn btn-danger mt-3">
+                                🚨 Segnala Plagio
+                            </a>
+                        <?php endif; ?>
                     <?php endif; ?>
                 
                     <button class="btn btn-outline-primary mt-3" type="button" data-bs-toggle="collapse" data-bs-target="#dettagliCalcolo">
