@@ -42,6 +42,20 @@
         exit;
     }
 
+    // Controllo se esiste già una segnalazione
+    $query = "SELECT COUNT(*) FROM plagiarism_reports WHERE forecast_id = ? AND reported_by = ?";
+    $stmt = $__con->prepare($query);
+    $stmt->bind_param("ii", $forecast_id, $user_id);
+    $stmt->execute();
+    $stmt->bind_result($alreadyReported);
+    $stmt->fetch();
+    $stmt->close();
+
+    if ($alreadyReported > 0) {
+        header('Location: ../students_forecasts.php?message=Hai già segnalato questa previsione&type=error');
+        exit;
+    }
+
     // Inserisci la segnalazione nel database
     $stmt = $__con->prepare("INSERT INTO plagiarism_reports (forecast_id, reported_by, reported_user_id, comment) VALUES (?, ?, ?, ?)");
     $stmt->bind_param("iiis", $forecast_id, $user_id, $reported_user_id, $comment);
