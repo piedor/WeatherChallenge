@@ -31,6 +31,9 @@
     // Icone valide per ogni singolo codice meteo (per previsioni utenti)
     $validWeatherEmojiFromWmoCode = $settings['validWeatherEmojiFromWmoCode'] ?? [];
 
+    // URL base
+    $baseUrl = $settings['baseUrl'] ?? "";
+
     // Includi la versione per evitare problemi di cache
     require_once 'version.php';
 

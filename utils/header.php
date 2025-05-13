@@ -4,8 +4,10 @@
                             font-weight: bold; 
                             color: #008CBA;">
     </h1>
-
-    <?php require ('menu.php'); ?>
+    <?php
+        require __DIR__ . '/settings.php';
+        require ('menu.php'); 
+    ?>
 
     <script>
         const text = "WeatherChallenge ⛅";
@@ -75,13 +77,13 @@
 
             <!-- Impostazioni -->
             <li>
-                <a class="dropdown-item text-center" href="user_settings.php">⚙️ Impostazioni</a>
+                <a class="dropdown-item text-center" href="<?= $baseUrl ?>/user_settings.php">⚙️ Impostazioni</a>
             </li>
 
             <li><hr class="dropdown-divider"></li>
 
             <!-- Logout -->
-            <li><a class="dropdown-item text-danger text-center fw-bold" href="logout.php">Esci</a></li>
+            <li><a class="dropdown-item text-danger text-center fw-bold" href="<?= $baseUrl ?>/logout.php">Esci</a></li>
         </ul>
     </div>
 </div>
