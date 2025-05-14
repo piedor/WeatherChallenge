@@ -104,36 +104,47 @@
                         <!-- Azioni -->
                         <td>
                             <?php if ($report['status'] === 'open'): ?>
-                                <!-- Cambia in Reviewing -->
-                                <form action="../api/update_report_status.php" method="POST" style="display:inline;">
-                                    <input type="hidden" name="report_id" value="<?= $report['id'] ?>">
-                                    <input type="hidden" name="status" value="reviewing">
-                                    <button type="submit" class="btn btn-info btn-sm">Prendi in carico</button>
-                                </form>
+                                <button onclick="updateReportStatus(<?= $report['id'] ?>, 'reviewing')" class="btn btn-info btn-sm">Prendi in carico</button>
                             <?php elseif ($report['status'] === 'reviewing'): ?>
-                                <!-- Conferma o Annulla Plagio -->
-                                <form action="../api/update_report_status.php" method="POST" style="display:inline;">
-                                    <input type="hidden" name="report_id" value="<?= $report['id'] ?>">
-                                    <input type="hidden" name="status" value="closed">
-                                    <input type="hidden" name="outcome" value="confirmed">
-                                    <button type="submit" class="btn btn-success btn-sm">Conferma Plagio</button>
-                                </form>
-                                <form action="../api/update_report_status.php" method="POST" style="display:inline;">
-                                    <input type="hidden" name="report_id" value="<?= $report['id'] ?>">
-                                    <input type="hidden" name="status" value="closed">
-                                    <input type="hidden" name="outcome" value="dismissed">
-                                    <button type="submit" class="btn btn-secondary btn-sm">Nessun Plagio</button>
-                                </form>
+                                <button onclick="updateReportStatus(<?= $report['id'] ?>, 'closed', 'confirmed')" class="btn btn-success btn-sm">Conferma Plagio</button>
+                                <button onclick="updateReportStatus(<?= $report['id'] ?>, 'closed', 'dismissed')" class="btn btn-secondary btn-sm">Nessun Plagio</button>
                             <?php else: ?>
                                 <span class="text-muted">-</span>
                             <?php endif; ?>
                         </td>
-
                     </tr>
                 <?php endwhile; ?>
             </tbody>
         </table>
     </div>
+    <script>
+        function updateReportStatus(reportId, status, outcome = null) {
+            const formData = new FormData();
+            formData.append('report_id', reportId);
+            formData.append('status', status);
+            if (outcome !== null) {
+                formData.append('outcome', outcome);
+            }
+
+            fetch('../api/update_report_status.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Aggiorna pagina (o aggiorna tabella senza reload, se vuoi)
+                    location.reload();
+                } else {
+                    alert('Errore: ' + (data.error || 'Impossibile aggiornare.'));
+                }
+            })
+            .catch(error => {
+                alert('Errore di rete.');
+                console.error('Errore:', error);
+            });
+        }
+    </script>
     <script src="../assets/js/main.js"></script>
 </body>
 </html>
