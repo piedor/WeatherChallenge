@@ -70,16 +70,50 @@
             </div>
         </div>
 
-        <form action="api/submit_plagiarism_report.php" method="POST">
-            <input type="hidden" name="id" value="<?= htmlspecialchars($forecast['id']) ?>">
+        <form id="plagiarismForm">
+            <input type="hidden" id="forecastId" value="<?= htmlspecialchars($forecast['id']) ?>">
             <div class="form-group">
                 <label for="comment">Motivazione della segnalazione</label>
-                <textarea name="comment" id="comment" class="form-control" rows="5" required></textarea>
+                <textarea id="comment" class="form-control" rows="5" required></textarea>
             </div>
             <button type="submit" class="btn btn-danger mt-3">Invia Segnalazione</button>
             <a href="students_forecasts.php" class="btn btn-secondary mt-3">Annulla</a>
         </form>
     </div>
+    <script>
+        document.getElementById('plagiarismForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Evita l'invio tradizionale del form
+
+            const forecastId = document.getElementById('forecastId').value;
+            const comment = document.getElementById('comment').value.trim();
+
+            if (comment === '') {
+                alert('Inserisci una motivazione per la segnalazione.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('id', forecastId);
+            formData.append('comment', comment);
+
+            fetch('api/submit_plagiarism_report.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = "student_forecast_details.php?id=<?php echo $forecast['user_id']; ?>&message=Segnalazione inviata con successo&type=success";
+                } else {
+                    window.location.href = "student_forecast_details.php?id=<?php echo $forecast['user_id']; ?>&message=Errore: " + (data.error || 'Impossibile inviare la segnalazione.') + "&type=error";
+                }
+            })
+            .catch(error => {
+                alert('Errore di rete.');
+                console.error('Errore:', error);
+            });
+        });
+    </script>
     <script src="./assets/js/main.js"></script>
 </body>
 
