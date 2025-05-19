@@ -13,8 +13,6 @@
         die("Errore: 5º giorno non disponibile.");
     }
 
-    echo $forecastArray[4];
-
     $day = $forecastArray[4];
 
     // Estrai i dati
@@ -68,13 +66,11 @@
 
     // Esegui lo statement
     if ($stmt->execute()) {
-        echo "Previsione salvata correttamente.";
+        echo json_encode(["success" => true]);
     } else {
-        echo "Errore durante l'inserimento: " . $stmt->error;
+        http_response_code(500); // Server error
+        echo json_encode(["error" => "Errore durante l'inserimento: " . $stmt->error]);
     }
 
     $stmt->close();
-
-    echo json_encode($forecastArray[4]);
-
 ?>
