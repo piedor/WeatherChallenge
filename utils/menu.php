@@ -32,8 +32,8 @@
             <li class="list-group-item"><a href="<?= $baseUrl ?>/forecast_resources.php" class="text-decoration-none">🛠️ Strumenti Meteo</a></li>
             <li class="list-group-item"><a href="<?= $baseUrl ?>/data_video.php" class="text-decoration-none">📺 Previsioni pubbliche</a></li>
             <li class="list-group-item"><a href="<?= $baseUrl ?>/global_ranking.php" class="text-decoration-none">🏆 Classifica</a></li>
-            <!--<li class="list-group-item"><a href="" class="text-decoration-none">🌦️ Dati Meteo Attuali</a></li>
-            <li class="list-group-item"><a href="" class="text-decoration-none">📈 Statistiche</a></li>-->
+            <li class="list-group-item"><a href="<?= $baseUrl ?>/weather_sources_forecasts.php" class="text-decoration-none">📈 Statistiche Siti Meteo Ufficiali</a></li>
+            <!--<li class="list-group-item"><a href="" class="text-decoration-none">📈 Statistiche</a></li>-->
         </ul>
     </div>
 </div>
