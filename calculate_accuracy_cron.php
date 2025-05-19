@@ -361,5 +361,23 @@
         $updateStmt->execute();
     }
 
+    // accuratezza totale meteo ufficiali
+
+    $accuracyQuery = "SELECT AVG(accuracy) AS total_accuracy FROM weather_sources_forecasts WHERE weather_source_id = 1 AND date BETWEEN ? AND ?";
+    $accuracyStmt = $__con->prepare($accuracyQuery);
+    $accuracyStmt->bind_param("ss", $oneMonthAgo, $yesterday);
+    $accuracyStmt->execute();
+    $accuracyResult = $accuracyStmt->get_result();
+
+    if ($accuracyRow = $accuracyResult->fetch_assoc()) {
+        $totalAccuracy = round($accuracyRow['total_accuracy'], 2) ?? 0;
+
+        // Aggiorna il campo total_accuracy nella tabella weather_sources
+        $updateQuery = "UPDATE weather_sources SET total_accuracy = ? WHERE id = 1";
+        $updateStmt = $__con->prepare($updateQuery);
+        $updateStmt->bind_param("d", $totalAccuracy);
+        $updateStmt->execute();
+    }
+
     echo "Calcolo delle accuratezze completato.";
 ?>
