@@ -20,8 +20,8 @@
     $forecastDate = $day['giorno'];
     $morningDesc = $day['mattina'];
     $afternoonDesc = $day['pomeriggio'];
-    $tempMax = $day['tMin'];
-    $tempMin = $day['tMax'];
+    $tempMax = $day['tMax'];
+    $tempMin = $day['tMin'];
 
     // Placeholder temporanei
     $weatherAccuracy = null;

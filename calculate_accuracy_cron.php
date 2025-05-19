@@ -309,5 +309,57 @@
         $updateStmt->execute();
     }
 
+    // Calcola accuratezza meteo ufficiali
+    $yesterday = date('Y-m-d', strtotime('yesterday'));
+    $query = "SELECT * FROM weather_sources_forecasts WHERE date = ?";
+    $stmt = $__con->prepare($query);
+    $stmt->bind_param("s", $yesterday);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    while ($row = $result->fetch_assoc()) {
+        // Chiama l'API per l'accuratezza meteo
+        $data = [
+            "weather_codes" => json_decode($weather_codes_json, true),
+            "morning_desc" => $row['morning_desc'],
+            "afternoon_desc" => $row['afternoon_desc']
+        ];
+
+        $options = [
+            "http" => [
+                "header"  => "Content-Type: application/json\r\n",
+                "method"  => "POST",
+                "content" => json_encode($data)
+            ]
+        ];
+        
+        $context  = stream_context_create($options);
+        $response = file_get_contents($apiUrl, false, $context);
+        
+        if ($response === FALSE) {
+            die("Errore: errore nella richiesta API per il calcolo delle accuratezze meteo.");
+        }
+
+        $accuracyData = json_decode($response, true);
+
+        // Calcola accuratezza temperatura
+        $tempAccuracy = calculateTemperatureAccuracy($row['temp_min'], $row['temp_max'], $realTempMin, $realTempMax);
+
+        // Calcola l'accuratezza totale
+        $accuracy = round(($accuracyData["accuracy"]["total"] * 0.6 + $tempAccuracy * 0.4), 2);
+
+        // Calcola la media degli errori assoluti tra temp min e max prevista e reale
+        $errorTempMin = abs($row['temp_min'] - $realTempMin);
+        $errorTempMax = abs($row['temp_max'] - $realTempMax);
+
+        $errorTempAvg = round(($errorTempMax + $errorTempMin) / 2, 1);
+
+        // Aggiorna i valori nel database
+        $updateQuery = "UPDATE weather_sources_forecasts SET weather_accuracy = ?, temp_accuracy = ?, accuracy = ?, temp_error = ? WHERE id = ?";
+        $updateStmt = $__con->prepare($updateQuery);
+        $updateStmt->bind_param("ddddi", $accuracyData["accuracy"]["total"], $tempAccuracy, $accuracy, $errorTempAvg, $row['id']);
+        $updateStmt->execute();
+    }
+
     echo "Calcolo delle accuratezze completato.";
 ?>
