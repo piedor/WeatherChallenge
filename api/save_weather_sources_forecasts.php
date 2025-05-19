@@ -24,10 +24,10 @@
     $tempMin = $day['tMin'];
 
     // Placeholder temporanei
-    $weatherAccuracy = null;
-    $tempAccuracy = null;
-    $accuracy = null;
-    $tempError = null;
+    $weatherAccuracy = 0;
+    $tempAccuracy = 0;
+    $accuracy = 0;
+    $tempError = 0;
 
     // Prepara lo statement
     $stmt = $__con->prepare("

@@ -6,12 +6,6 @@
     $message = $_GET['message'] ?? null;
     $type = $_GET['type'] ?? null; // "success" o "error"
 
-    // Solo i professori e admin possono accedere
-    if ($role !== 'professor' && $role !== 'admin') {
-        header('Location: index.php');
-        exit;
-    }
-
     $query = "SELECT id, name, total_accuracy FROM weather_sources ORDER BY total_accuracy DESC";
     $result = $__con->query($query);
 
