@@ -113,7 +113,7 @@
                                         <li><span class="weather-icon">☀️</span> Soleggiato</li>
                                         <li><span class="weather-icon">⛅</span> Parzialmente Nuvoloso</li>
                                         <li><span class="weather-icon">☁️</span> Nuvoloso</li>
-                                        <li><span class="weather-icon">☔</span> Pioggia</li>
+                                        <li><span class="weather-icon">🌧️</span> Pioggia</li>
                                         <li><span class="weather-icon">❄️</span> Neve</li>
                                         <li><span class="weather-icon">⚽</span> Grandine (misto pioggia)</li>
                                         <li><span class="weather-icon">🌩️</span> Temporale (misto pioggia)</li>

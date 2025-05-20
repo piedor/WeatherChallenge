@@ -54,7 +54,7 @@
                             <!-- Nuvoloso -->
                             <button type="button" class="weather-btn" data-value="Nuvoloso" data-bs-toggle="tooltip" title="Nuvoloso" onclick="selectWeather(this, 'morning_desc')">☁️</button>
                             <!-- Pioggia -->
-                            <button type="button" class="weather-btn" data-value="Pioggia" data-bs-toggle="tooltip" title="Pioggia" onclick="selectWeather(this, 'morning_desc')">☔</button>
+                            <button type="button" class="weather-btn" data-value="Pioggia" data-bs-toggle="tooltip" title="Pioggia" onclick="selectWeather(this, 'morning_desc')">🌧️</button>
                             <!-- Neve -->
                             <button type="button" class="weather-btn" data-value="Neve" data-bs-toggle="tooltip" title="Neve" onclick="selectWeather(this, 'morning_desc')">❄️</button>
                             <!-- Grandine -->
@@ -75,7 +75,7 @@
                             <!-- Nuvoloso -->
                             <button type="button" class="weather-btn" data-value="Nuvoloso" data-bs-toggle="tooltip" title="Nuvoloso" onclick="selectWeather(this, 'afternoon_desc')">☁️</button>
                             <!-- Pioggia -->
-                            <button type="button" class="weather-btn" data-value="Pioggia" data-bs-toggle="tooltip" title="Pioggia" onclick="selectWeather(this, 'afternoon_desc')">☔</button>
+                            <button type="button" class="weather-btn" data-value="Pioggia" data-bs-toggle="tooltip" title="Pioggia" onclick="selectWeather(this, 'afternoon_desc')">🌧️</button>
                             <!-- Neve -->
                             <button type="button" class="weather-btn" data-value="Neve" data-bs-toggle="tooltip" title="Neve" onclick="selectWeather(this, 'afternoon_desc')">❄️</button>
                             <!-- Grandine -->
@@ -98,7 +98,7 @@
                                 <li><span class="weather-icon">☀️</span> Soleggiato</li>
                                 <li><span class="weather-icon">⛅</span> Parzialmente Nuvoloso</li>
                                 <li><span class="weather-icon">☁️</span> Nuvoloso</li>
-                                <li><span class="weather-icon">☔</span> Pioggia</li>
+                                <li><span class="weather-icon">🌧️</span> Pioggia</li>
                                 <li><span class="weather-icon">❄️</span> Neve</li>
                                 <li><span class="weather-icon">⚽</span> Grandine (misto pioggia)</li>
                                 <li><span class="weather-icon">🌩️</span> Temporale (misto pioggia)</li>
