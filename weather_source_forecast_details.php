@@ -13,7 +13,7 @@
     }
 
     // Recupera nome del sito meteo
-    $stmt = $__con->prepare("SELECT name FROM weather_sources WHERE id = ?");
+    $stmt = $__con->prepare("SELECT name, attribution FROM weather_sources WHERE id = ?");
     $stmt->bind_param("i", $weatherSourceId);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -97,6 +97,7 @@
     
     <div class="container mt-4">
         <h2 class="mb-4">📅 Previsioni di <?= htmlspecialchars($weatherSource['name']) ?></h2>
+        <?php echo $weatherSource['attribution'] ?>
 
         <div id="calendar"></div>
 
