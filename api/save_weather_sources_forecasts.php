@@ -1,36 +1,42 @@
 <?php
-    // Salva le previsioni del 5 giorno dai siti Meteotrentino ecc...
-    include '../utils/db_connection.php';
-    // Ritorna il JSON
-    header('Content-Type: application/json');
+include '../utils/db_connection.php';
+header('Content-Type: application/json');
 
-    // Recupera i dati da getMeteoTrentinoForecasts.php
-    $forecastJson = file_get_contents('https://liceodavincitn.it/StazioneMeteo/dashboard/api/get_meteo_trentino_forecasts.php');
+function insertForecast($con, $url, $weatherSourceId) {
+    $forecastJson = file_get_contents($url);
+
+    if ($forecastJson === false) {
+        echo json_encode(["error" => "Errore nel recupero dati da $url"]);
+        return false;
+    }
+
     $forecastArray = json_decode($forecastJson, true);
 
-    // Controlla se esiste almeno 5 giorni
     if (!isset($forecastArray[4])) {
-        die("Errore: 5º giorno non disponibile.");
+        echo json_encode(["error" => "5º giorno non disponibile da $url"]);
+        return false;
     }
 
     $day = $forecastArray[4];
 
-    // Estrai i dati
-    $weatherSourceId = 1; //MeteoTrentino
-    $forecastDate = $day['giorno'];
-    $morningDesc = $day['mattina'];
-    $afternoonDesc = $day['pomeriggio'];
-    $tempMax = $day['tMax'];
-    $tempMin = $day['tMin'];
+    $forecastDate = $day['giorno'] ?? null;
+    $morningDesc = $day['mattina'] ?? null;
+    $afternoonDesc = $day['pomeriggio'] ?? null;
+    $tempMax = $day['tMax'] ?? null;
+    $tempMin = $day['tMin'] ?? null;
 
-    // Placeholder temporanei
+    // Validazione base
+    if (!$forecastDate || !$morningDesc || !$afternoonDesc || $tempMax === null || $tempMin === null) {
+        echo json_encode(["error" => "Dati incompleti per il 5º giorno da $url"]);
+        return false;
+    }
+
     $weatherAccuracy = 0;
     $tempAccuracy = 0;
     $accuracy = 0;
     $tempError = 0;
 
-    // Prepara lo statement
-    $stmt = $__con->prepare("
+    $stmt = $con->prepare("
         INSERT INTO weather_sources_forecasts (
             weather_source_id,
             date,
@@ -46,10 +52,10 @@
     ");
 
     if (!$stmt) {
-        die("Errore nella prepare: " . $__con->error);
+        echo json_encode(["error" => "Errore prepare: " . $con->error]);
+        return false;
     }
 
-    // Tipi: i = intero, s = stringa, d = double
     $stmt->bind_param(
         "issssssddd",
         $weatherSourceId,
@@ -64,13 +70,20 @@
         $tempError
     );
 
-    // Esegui lo statement
-    if ($stmt->execute()) {
-        echo json_encode(["success" => true]);
-    } else {
-        http_response_code(500); // Server error
-        echo json_encode(["error" => "Errore durante l'inserimento: " . $stmt->error]);
+    $success = $stmt->execute();
+
+    if (!$success) {
+        echo json_encode(["error" => "Errore inserimento ($weatherSourceId): " . $stmt->error]);
     }
 
     $stmt->close();
+    return $success;
+}
+
+$success1 = insertForecast($__con, 'https://liceodavincitn.it/StazioneMeteo/dashboard/api/get_meteo_trentino_forecasts.php', 1);
+$success2 = insertForecast($__con, 'https://liceodavincitn.it/StazioneMeteo/dashboard/api/get_open_meteo_forecasts.php', 2);
+
+if ($success1 && $success2) {
+    echo json_encode(["success" => true]);
+}
 ?>
