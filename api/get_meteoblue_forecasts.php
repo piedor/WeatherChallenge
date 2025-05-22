@@ -48,6 +48,56 @@
         return array_key_first($counts);
     }
 
+    // Mappa di associazione per i pictocode
+    $pictocodeDescriptions = [
+        // Soleggiato
+        1 => "Soleggiato",
+        2 => "Soleggiato",
+        3 => "Soleggiato",
+        13 => "Soleggiato",
+        14 => "Soleggiato",
+        15 => "Soleggiato",
+
+        // Parzialmente Nuvoloso
+        4 => "Parzialmente Nuvoloso",
+        5 => "Parzialmente Nuvoloso",
+        6 => "Parzialmente Nuvoloso",
+
+        // Nuvoloso
+        7 => "Nuvoloso",
+        8 => "Nuvoloso",
+        9 => "Nuvoloso",
+        10 => "Nuvoloso",
+        11 => "Nuvoloso",
+        12 => "Nuvoloso",
+        16 => "Nuvoloso",
+        17 => "Nuvoloso",
+        18 => "Nuvoloso",
+        19 => "Nuvoloso",
+        20 => "Nuvoloso",
+        21 => "Nuvoloso",
+        22 => "Nuvoloso",
+
+        // Pioggia
+        23 => "Pioggia",
+        25 => "Pioggia",
+        31 => "Pioggia",
+        33 => "Pioggia",
+        35 => "Pioggia",
+
+        // Neve
+        24 => "Neve",
+        26 => "Neve",
+        32 => "Neve",
+        34 => "Neve",
+
+        // Temporale
+        27 => "Temporale",
+        28 => "Temporale",
+        29 => "Temporale",
+        30 => "Temporale",
+    ];
+
     // Costruzione array finale
     $results = [];
 
@@ -57,9 +107,10 @@
         $tMin = min($temps);
         $tMax = max($temps);
 
-        $results[$day] = [
-            'morning' => $most_common_morning,
-            'afternoon' => $most_common_afternoon,
+        $results[] = [
+            'giorno' => $day,
+            'mattina' => $pictocodeDescriptions[$most_common_morning],
+            'pomeriggio' => $pictocodeDescriptions[$most_common_afternoon],
             'tMin' => $tMin,
             'tMax' => $tMax
         ];

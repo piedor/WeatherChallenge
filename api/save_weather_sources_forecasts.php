@@ -82,8 +82,9 @@ function insertForecast($con, $url, $weatherSourceId) {
 
 $success1 = insertForecast($__con, 'https://liceodavincitn.it/StazioneMeteo/dashboard/api/get_meteo_trentino_forecasts.php', 1);
 $success2 = insertForecast($__con, 'https://liceodavincitn.it/StazioneMeteo/dashboard/api/get_open_meteo_forecasts.php', 2);
+$success3 = insertForecast($__con, 'https://liceodavincitn.it/StazioneMeteo/dashboard/api/get_meteoblue_forecasts.php', 3);
 
-if ($success1 && $success2) {
+if ($success1 && $success2 && $success3) {
     echo json_encode(["success" => true]);
 }
 ?>
