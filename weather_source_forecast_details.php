@@ -46,7 +46,7 @@
             // NON aggiungere URL
         } elseif ($row['accuracy'] > 0 || $dateForecast < $dateToday) {
             $event['title'] = $row['accuracy'] . "%";
-            $event['url'] = "details_forecast.php?id=" . $idForecast;
+            $event['url'] = "details_weather_source_forecasts.php?id=" . $idForecast;
         }
     
         // Colore in base all'accuratezza
@@ -135,7 +135,7 @@
                     <?php if ($isFuture): ?>
                         <button class="btn btn-sm btn-secondary" disabled title="Previsione non ancora valutata">⏳</button>
                     <?php else: ?>
-                        <a class="btn btn-sm btn-outline-info" href="details_forecast.php?id=<?= $row['id'] ?>">🔍</a>
+                        <a class="btn btn-sm btn-outline-info" href="details_weather_source_forecasts.php?id=<?= $row['id'] ?>">🔍</a>
                     <?php endif; ?>
                 </td>
             </tr>
