@@ -135,10 +135,10 @@
 
                     <?php if (isset($role) && ($role === 'professor' || $role === 'admin') && $user_id !== $forecast['user_id']): ?>
                         <?php
-                            // Controlla se la previsione è già stata segnalata da questo professore
-                            $query = "SELECT COUNT(*) FROM plagiarism_reports WHERE forecast_id = ? AND reported_by = ?";
+                            // Controlla se la previsione è già stata segnalata
+                            $query = "SELECT COUNT(*) FROM plagiarism_reports WHERE forecast_id = ?";
                             $stmt = $__con->prepare($query);
-                            $stmt->bind_param("ii", $forecast['id'], $user_id);
+                            $stmt->bind_param("i", $forecast['id']);
                             $stmt->execute();
                             $stmt->bind_result($alreadyReported);
                             $stmt->fetch();
@@ -146,7 +146,7 @@
                         ?>
                         <?php if ($alreadyReported > 0): ?>
                             <button class="btn btn-success mt-3" disabled>
-                                ✅ Segnalato
+                                ✅ Già segnalato
                             </button>
                         <?php else: ?>
                             <a href="report_plagiarism.php?id=<?= $forecast['id'] ?>" class="btn btn-danger mt-3">
