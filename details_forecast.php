@@ -133,6 +133,12 @@
                     <p><strong>Accuratezza temperatura giornaliera:</strong> <?= htmlspecialchars($forecast['temp_accuracy']) ?>%</p>
                     <p><strong>Accuratezza condizioni meteorologiche:</strong> <?= htmlspecialchars($forecast['weather_accuracy']) ?>%</p>
 
+                    <?php if ($forecast['is_plag']): ?>
+                        <div class="alert alert-danger mt-3">
+                            ⚠️ Questa previsione è stata segnalata per plagio e non è valida.
+                        </div>
+                    <?php endif; ?>
+
                     <?php if (isset($role) && ($role === 'professor' || $role === 'admin') && $user_id !== $forecast['user_id']): ?>
                         <?php
                             // Controlla se la previsione è già stata segnalata
