@@ -14,10 +14,47 @@
         $afternoon_desc = $_POST['afternoon_desc'];
         $note = trim($_POST['note']);
 
+        function isForecastSuspicious($conn, $forecast) {
+            $sql = "SELECT * FROM weather_sources_forecasts WHERE date = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("s", $forecast['date']);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            while ($row = $result->fetch_assoc()) {
+                $similar = 0;
+
+                if (abs($row['temp_max'] - $forecast['temp_max']) <= 1) $similar++;
+                if (abs($row['temp_min'] - $forecast['temp_min']) <= 1) $similar++;
+                if (strcasecmp($row['morning_desc'], $forecast['morning_desc']) == 0) $similar++;
+                if (strcasecmp($row['afternoon_desc'], $forecast['afternoon_desc']) == 0) $similar++;
+
+                if ($similar >= 3) {
+                    return true; // considerata sospetta
+                }
+            }
+
+            return false;
+        }
+        // Verifica se la previsione è sospetta
+        $forecast = [
+            'date' => $forecast['date'],
+            'temp_min' => $temp_min,
+            'temp_max' => $temp_max,
+            'morning_desc' => $morning_desc,
+            'afternoon_desc' => $afternoon_desc
+        ];
+
+        if (isForecastSuspicious($__con, $forecast)) {
+            $suspiciousFlag = 1;
+        } else {
+            $suspiciousFlag = 0;
+        }
+
         // Aggiorna la previsione nel database
-        $query = "UPDATE forecasts SET temp_min = ?, temp_max = ?, morning_desc = ?, afternoon_desc = ?, note = ?, updated_at=now() WHERE id = ?";
+        $query = "UPDATE forecasts SET temp_min = ?, temp_max = ?, morning_desc = ?, afternoon_desc = ?, note = ?, updated_at=now(), is_sosp = ? WHERE id = ?";
         $stmt = $__con->prepare($query);
-        $stmt->bind_param("sssssi", $temp_min, $temp_max, $morning_desc, $afternoon_desc, $note, $forecast_id);
+        $stmt->bind_param("ssssssi", $temp_min, $temp_max, $morning_desc, $afternoon_desc, $note, $suspiciousFlag, $forecast_id);
 
 
         if ($stmt->execute()) {

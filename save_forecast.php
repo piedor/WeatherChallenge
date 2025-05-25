@@ -23,6 +23,29 @@
             exit;
         }
 
+        function isForecastSuspicious($conn, $forecast) {
+            $sql = "SELECT * FROM weather_sources_forecasts WHERE date = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("s", $forecast['date']);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            while ($row = $result->fetch_assoc()) {
+                $similar = 0;
+
+                if (abs($row['temp_max'] - $forecast['temp_max']) <= 1) $similar++;
+                if (abs($row['temp_min'] - $forecast['temp_min']) <= 1) $similar++;
+                if (strcasecmp($row['morning_desc'], $forecast['morning_desc']) == 0) $similar++;
+                if (strcasecmp($row['afternoon_desc'], $forecast['afternoon_desc']) == 0) $similar++;
+
+                if ($similar >= 3) {
+                    return true; // considerata sospetta
+                }
+            }
+
+            return false;
+        }
+
         // Controllo della data
         $current_date = new DateTime(); // Data attuale
         $forecast_date = new DateTime($date); // Data inserita dall'utente
@@ -41,10 +64,25 @@
             if ($row['count'] > 0) {
                 $message = "Hai già caricato una previsione per questa data.";
             } else {
+                // Verifica se la previsione è sospetta
+                $forecast = [
+                    'date' => $date,
+                    'temp_max' => $temp_max,
+                    'temp_min' => $temp_min,
+                    'morning_desc' => $morning_desc,
+                    'afternoon_desc' => $afternoon_desc
+                ];
+
+                if (isForecastSuspicious($__con, $forecast)) {
+                    $suspiciousFlag = 1;
+                } else {
+                    $suspiciousFlag = 0;
+                }
+
                 // Inserisci una nuova previsione
-                $query = "INSERT INTO forecasts (user_id, date, temp_max, temp_min,  morning_desc, afternoon_desc, note) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                $query = "INSERT INTO forecasts (user_id, date, temp_max, temp_min,  morning_desc, afternoon_desc, note, is_sosp) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                 $stmt = $__con->prepare($query);
-                $stmt->bind_param("issssss", $user_id, $date, $temp_max, $temp_min, $morning_desc, $afternoon_desc, $note);
+                $stmt->bind_param("issssssi", $user_id, $date, $temp_max, $temp_min, $morning_desc, $afternoon_desc, $note, $suspiciousFlag);
 
                 if ($stmt->execute()) {
                     $message = "Previsione caricata con successo!";
