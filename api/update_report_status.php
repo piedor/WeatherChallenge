@@ -46,6 +46,23 @@
     }
 
     if ($stmt->execute()) {
+        $stmt->close();
+        // Se outcome è confirmed, aggiorna forecasts
+        if ($newStatus === 'closed' && $outcome === 'confirmed') {
+            // Recupera forecast_id dalla segnalazione
+            $getForecastId = $__con->prepare("SELECT forecast_id FROM plagiarism_reports WHERE id = ?");
+            $getForecastId->bind_param("i", $reportId);
+            $getForecastId->execute();
+            $getForecastId->bind_result($forecastId);
+            if ($getForecastId->fetch()) {
+                $getForecastId->close();
+                // Aggiorna forecasts
+                $updateForecast = $__con->prepare("UPDATE forecasts SET is_plag = 1, accuracy = 0 WHERE id = ?");
+                $updateForecast->bind_param("i", $forecastId);
+                $updateForecast->execute();
+                $updateForecast->close();
+            }
+        }
         echo json_encode(["success" => true]);
     } else {
         echo json_encode(["error" => "Errore durante l'aggiornamento della segnalazione."]);

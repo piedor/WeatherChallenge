@@ -19,6 +19,13 @@
         $events = [];
         
         while ($row = $result->fetch_assoc()) {
+            // Vedi se id forecast è nel registro segnalazione plagi
+            $query = "SELECT 1 FROM plagiarism_reports WHERE forecast_id = ? LIMIT 1";
+            $stmt = $__con->prepare($query);
+            $stmt->bind_param("i", $row['id']);
+            $stmt->execute();
+            $isReported = $stmt->get_result()->num_rows > 0;
+
             $color = '#0000FF'; // Blu di default (solo previsione inserita)
             $title = "Inserita"; // Titolo di default
             $dateForecast = $row['date'];
@@ -34,7 +41,12 @@
                 $color = '#FFD700';
                 $url = "";
             } elseif ($row['accuracy'] > 0 || $dateForecast < $dateToday) {
-                $title = $row['accuracy'] . "%"; // Mostra accuratezza se > 0
+                if($isReported){
+                    $event['title'] = $row['accuracy'] . "% ⚠️"; 
+                }
+                else{
+                    $event['title'] = $row['accuracy'] . "%";
+                }
                 $url = "details_forecast.php?id=" . $idForecast; 
             }
 
