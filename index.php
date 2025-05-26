@@ -42,10 +42,10 @@
                 $url = "";
             } elseif ($row['accuracy'] > 0 || $dateForecast < $dateToday) {
                 if($isReported){
-                    $event['title'] = $row['accuracy'] . "% ⚠️"; 
+                    $title = $row['accuracy'] . "% ⚠️"; 
                 }
                 else{
-                    $event['title'] = $row['accuracy'] . "%";
+                    $title = $row['accuracy'] . "%";
                 }
                 $url = "details_forecast.php?id=" . $idForecast; 
             }
