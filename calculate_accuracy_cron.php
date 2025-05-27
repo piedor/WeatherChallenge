@@ -361,22 +361,30 @@
         $updateStmt->execute();
     }
 
-    // accuratezza totale meteo ufficiali
+    // accuratezza totale meteo ufficiali PER OGNI METEO UFFICIALE
+    $weatherSourcesQuery = "SELECT id FROM weather_sources";
+    $weatherSourcesStmt = $__con->prepare($weatherSourcesQuery);
+    $weatherSourcesStmt->execute();
+    $weatherSourcesResult = $weatherSourcesStmt->get_result();
 
-    $accuracyQuery = "SELECT AVG(accuracy) AS total_accuracy FROM weather_sources_forecasts WHERE weather_source_id = 1 AND date BETWEEN ? AND ?";
-    $accuracyStmt = $__con->prepare($accuracyQuery);
-    $accuracyStmt->bind_param("ss", $oneMonthAgo, $yesterday);
-    $accuracyStmt->execute();
-    $accuracyResult = $accuracyStmt->get_result();
+    while ($weatherSource = $weatherSourcesResult->fetch_assoc()) {
+        $sourceId = $weatherSource['id'];
 
-    if ($accuracyRow = $accuracyResult->fetch_assoc()) {
-        $totalAccuracy = round($accuracyRow['total_accuracy'], 2) ?? 0;
+        $accuracyQuery = "SELECT AVG(accuracy) AS total_accuracy FROM weather_sources_forecasts WHERE weather_source_id = ? AND date BETWEEN ? AND ?";
+        $accuracyStmt = $__con->prepare($accuracyQuery);
+        $accuracyStmt->bind_param("iss", $sourceId, $oneMonthAgo, $yesterday);
+        $accuracyStmt->execute();
+        $accuracyResult = $accuracyStmt->get_result();
 
-        // Aggiorna il campo total_accuracy nella tabella weather_sources
-        $updateQuery = "UPDATE weather_sources SET total_accuracy = ? WHERE id = 1";
-        $updateStmt = $__con->prepare($updateQuery);
-        $updateStmt->bind_param("d", $totalAccuracy);
-        $updateStmt->execute();
+        if ($accuracyRow = $accuracyResult->fetch_assoc()) {
+            $totalAccuracy = round($accuracyRow['total_accuracy'], 2) ?? 0;
+
+            // Aggiorna il campo total_accuracy nella tabella weather_sources
+            $updateQuery = "UPDATE weather_sources SET total_accuracy = ? WHERE id = ?";
+            $updateStmt = $__con->prepare($updateQuery);
+            $updateStmt->bind_param("di", $totalAccuracy, $sourceId);
+            $updateStmt->execute();
+        }
     }
 
     echo "Calcolo delle accuratezze completato.";
