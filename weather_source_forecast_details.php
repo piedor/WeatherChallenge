@@ -20,7 +20,7 @@
     $weatherSource = $result->fetch_assoc();
 
     // Recupera previsioni
-    $query = "SELECT * FROM weather_sources_forecasts WHERE weather_source_id = ? AND date < CURDATE() ORDER BY date DESC";
+    $query = "SELECT * FROM weather_sources_forecasts WHERE weather_source_id = ? AND date <= CURDATE() ORDER BY date DESC";
     $stmt = $__con->prepare($query);
     $stmt->bind_param("i", $weatherSourceId);
     $stmt->execute();
