@@ -3,7 +3,7 @@
     // Ritorna il JSON
     header('Content-Type: application/json');
 
-    $env = parse_ini_file('../.env'); // Adatta il percorso se necessario
+    $env = parse_ini_file('../.env');
     $apiKey = $env['API_KEY_METEOBLUE'];
 
     // URL dei dati meteo
