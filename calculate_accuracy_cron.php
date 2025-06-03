@@ -22,9 +22,36 @@
     $apiUrl = "$baseUrl/StazioneMeteo/dashboard/api/get_temperatures_station.php?interval=daily&date=" . $yesterday;
     $response = file_get_contents($apiUrl);
     $data = json_decode($response); // Decodifica il JSON
-    $realTempAvg = $data->data[3]->values->avg[0]; // Temperatura media
-    $realTempMax = $data->data[3]->values->max[0]; // Temperatura massima
-    $realTempMin = $data->data[3]->values->min[0]; // Temperatura minima
+    // Se la risposta non contiene "message":"No data for period...", significa che abbiamo dati
+    if (!isset($data->message)) {
+        $realTempAvg = $data->data[3]->values->avg[0]; // Temperatura media
+        $realTempMax = $data->data[3]->values->max[0]; // Temperatura massima
+        $realTempMin = $data->data[3]->values->min[0]; // Temperatura minima
+    } else {
+        // Utilizza il sito OpenMeteo per ottenere i dati meteo orari
+
+        // Coordinate di Trento
+        $latitude = "46.0679";
+        $longitude = "11.1211";
+
+        // Costruisci URL Open-Meteo
+        $apiUrl = sprintf(
+            "https://api.open-meteo.com/v1/forecast?latitude=%s&longitude=%s&hourly=temperature_2m&daily=temperature_2m_min,temperature_2m_max,temperature_2m_mean&start_date=%s&end_date=%s&timezone=Europe%%2FRome",
+            $latitude,
+            $longitude,
+            $yesterday,
+            $yesterday
+        );
+
+        // Richiesta API
+        $response = file_get_contents($apiUrl);
+        $data = json_decode($response);
+
+        // Estrai temperature giornaliere
+        $realTempAvg = round($data->daily->temperature_2m_mean[0], 1);
+        $realTempMax = round($data->daily->temperature_2m_max[0], 1);
+        $realTempMin = round($data->daily->temperature_2m_min[0], 1);
+    }
 
     // Ottieni i dati meteo dal giorno precedente
     $latitude = "46.0679"; // Inserire la latitudine corretta

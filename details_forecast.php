@@ -52,16 +52,49 @@
     $apiUrl = "$baseUrl/StazioneMeteo/dashboard/api/get_temperatures_station.php?interval=hourly&date=" . $date;
     $response = file_get_contents($apiUrl);
     $temperatureData = json_decode($response); // Decodifica il JSON
-    $temperatures = array_map(fn($t) => round($t, 1), $temperatureData->data[3]->values->avg ?? []); // Estrai le temperature
-    $temperatureJson = json_encode($temperatures); // Converti per JS
+    // Se la risposta non contiene "message":"No data for period...", significa che abbiamo dati
+    if (!isset($temperatureData->message)) {
+        $temperatures = array_map(fn($t) => round($t, 1), $temperatureData->data[3]->values->avg ?? []); // Estrai le temperature
+        $temperatureJson = json_encode($temperatures); // Converti per JS
 
-    // Chiamata API per temperatura giornalieri di $date
-    $apiUrl = "$baseUrl/StazioneMeteo/dashboard/api/get_temperatures_station.php?interval=daily&date=" . $date;
-    $response = file_get_contents($apiUrl);
-    $data = json_decode($response); // Decodifica il JSON
-    $realTempAvg = round($data->data[3]->values->avg[0], 1); // Temperatura media
-    $realTempMax = round($data->data[3]->values->max[0], 1); // Temperatura massima
-    $realTempMin = round($data->data[3]->values->min[0], 1); // Temperatura minima
+        // Chiamata API per temperatura giornalieri di $date
+        $apiUrl = "$baseUrl/StazioneMeteo/dashboard/api/get_temperatures_station.php?interval=daily&date=" . $date;
+        $response = file_get_contents($apiUrl);
+        $data = json_decode($response); // Decodifica il JSON
+        $realTempAvg = round($data->data[3]->values->avg[0], 1); // Temperatura media
+        $realTempMax = round($data->data[3]->values->max[0], 1); // Temperatura massima
+        $realTempMin = round($data->data[3]->values->min[0], 1); // Temperatura minima
+    }
+    // se la dimensione di $temperatures non è 24, significa che non abbiamo dati orari per quella data
+    if (count($temperatures) !== 24) {
+        // Utilizza il sito OpenMeteo per ottenere i dati meteo orari
+
+        // Coordinate di Trento
+        $latitude = "46.0679";
+        $longitude = "11.1211";
+
+        // Costruisci URL Open-Meteo
+        $apiUrl = sprintf(
+            "https://api.open-meteo.com/v1/forecast?latitude=%s&longitude=%s&hourly=temperature_2m&daily=temperature_2m_min,temperature_2m_max,temperature_2m_mean&start_date=%s&end_date=%s&timezone=Europe%%2FRome",
+            $latitude,
+            $longitude,
+            $date,
+            $date
+        );
+
+        // Richiesta API
+        $response = file_get_contents($apiUrl);
+        $data = json_decode($response);
+
+        // Estrai temperature orarie
+        $temperatures = array_map(fn($t) => round($t, 1), $data->hourly->temperature_2m ?? []);
+        $temperatureJson = json_encode($temperatures);
+
+        // Estrai temperature giornaliere
+        $realTempAvg = round($data->daily->temperature_2m_mean[0], 1);
+        $realTempMax = round($data->daily->temperature_2m_max[0], 1);
+        $realTempMin = round($data->daily->temperature_2m_min[0], 1);
+    }
 
     // Chiamata API per calcolo accuratezza METEO in base ai codici meteo reali e alle previsioni dell'utente
     $apiUrl = "$baseUrl/StazioneMeteo/dashboard/api/calculate_weather_accuracy.php";
