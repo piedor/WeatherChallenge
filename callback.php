@@ -10,8 +10,8 @@
     include 'utils/error_handler.php';
 
     $client = new Google\Client();
-    $client->setClientId('GOOGLE_CLIENT_ID'); // Sostituisci con l'ID client di Google
-    $client->setClientSecret('GOOGLE_CLIENT_SECRET'); // Sostituisci con il segreto client di Google
+    $client->setClientId($_ENV['GOOGLE_CLIENT_ID']); // Sostituisci con l'ID client di Google
+    $client->setClientSecret($_ENV['GOOGLE_CLIENT_SECRET']); // Sostituisci con il segreto client di Google
     $client->setRedirectUri('https://' . $_SERVER['HTTP_HOST'] . '/StazioneMeteo/dashboard/callback.php'); // Modifica con il tuo URI di callback
 
     // Ottieni il token di acceso
@@ -28,7 +28,7 @@
             $name = $userInfo->name;
             $role = '';
 
-            $adminEmails = ['ADMIN_EMAIL'];
+            $adminEmails = [trim($_ENV['ADMIN_EMAIL'])];
 
             // Determina il ruolo in base alla struttura dell'email
             if (in_array($email, $adminEmails)) {
