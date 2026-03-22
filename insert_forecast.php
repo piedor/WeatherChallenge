@@ -1,172 +1,169 @@
 <?php
-    // Include il file per il controllo della sessione
     include 'utils/check_session.php';
-
-    // Messaggio di conferma o errore
     $message = $_GET['message'] ?? null;
-    $type = $_GET['type'] ?? null; // "success" o "error"
-
+    $type    = $_GET['type'] ?? null;
 ?>
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Previsioni Meteo</title>
+    <title>Inserisci Previsione Meteo</title>
     <meta name="description" content="WebApp previsioni meteo">
     <meta name="author" content="Pietro Dorighi">
     <link href="./favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
     <?php require_once './utils/style.php'; ?>
     <link rel="stylesheet" href="./assets/css/style_app.css">
     <link rel="stylesheet" href="./assets/css/style_dashboard.css">
+    <link rel="stylesheet" href="./assets/css/style_insert_forecast.css">
 </head>
 <body class="bg-light">
-    <?php require ('./utils/header.php'); ?>
-    <!-- Eventuali messaggi di errore/successo -->
-    <?php if (!empty($message)): 
-            $alertClass = ($type === "success") ? "alert-success" : "alert-danger";
-    ?>
-        <div id="messageAlert" class="alert <?= $alertClass ?> alert-dismissible fade show mx-auto" role="alert" style="max-width: 1200px;">
+    <?php require('./utils/header.php'); ?>
+
+    <?php if (!empty($message)):
+        $alertClass = ($type === "success") ? "alert-success" : "alert-danger"; ?>
+        <div id="messageAlert" class="alert <?= $alertClass ?> alert-dismissible fade show mx-auto" role="alert" style="max-width:1200px;">
             <?= htmlspecialchars($message) ?>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Chiudi"></button>
         </div>
     <?php endif; ?>
+
     <div class="container">
-        <h1 class="text-center mb-4">Inserisci la tua Previsione Meteo</h1>
+        <h1 class="page-title text-center mb-4">Inserisci la tua Previsione Meteo</h1>
+
         <form id="forecastForm" method="POST" action="save_forecast.php">
+
+            <!-- Data -->
             <div class="mb-4">
                 <label for="date" class="form-label">Data:</label>
                 <input type="date" id="date" name="date" class="form-control" required>
             </div>
 
-            <div class="row">
-                <!-- Colonna dei pulsanti -->
+            <div class="row g-3">
+
+                <!-- Colonna bottoni -->
                 <div class="col-md-8">
-                    <!-- Selezione meteo mattina -->
+
+                    <!-- Mattina -->
                     <div class="mb-4">
-                        <label class="form-label">Descrizione Meteo - Mattina:</label>
+                        <label class="form-label">Descrizione Meteo — Mattina:</label>
                         <div class="weather-group">
-                            <!-- Soleggiato -->
-                            <button type="button" class="weather-btn" data-value="Soleggiato" data-bs-toggle="tooltip" title="Soleggiato" onclick="selectWeather(this, 'morning_desc')">☀️</button>
-                            <!-- Parzialmente Nuvoloso -->
-                            <button type="button" class="weather-btn" data-value="Parzialmente Nuvoloso" data-bs-toggle="tooltip" title="Parzialmente Nuvoloso" onclick="selectWeather(this, 'morning_desc')">⛅</button>
-                            <!-- Nuvoloso -->
-                            <button type="button" class="weather-btn" data-value="Nuvoloso" data-bs-toggle="tooltip" title="Nuvoloso" onclick="selectWeather(this, 'morning_desc')">☁️</button>
-                            <!-- Pioggia -->
-                            <button type="button" class="weather-btn" data-value="Pioggia" data-bs-toggle="tooltip" title="Pioggia" onclick="selectWeather(this, 'morning_desc')">🌧️</button>
-                            <!-- Neve -->
-                            <button type="button" class="weather-btn" data-value="Neve" data-bs-toggle="tooltip" title="Neve" onclick="selectWeather(this, 'morning_desc')">❄️</button>
-                            <!-- Grandine -->
-                            <button type="button" class="weather-btn" data-value="Grandine" data-bs-toggle="tooltip" title="Grandine" onclick="selectWeather(this, 'morning_desc')">⚽</button>
-                            <!-- Temporale -->
-                            <button type="button" class="weather-btn" data-value="Temporale" data-bs-toggle="tooltip" title="Temporale" onclick="selectWeather(this, 'morning_desc')">🌩️</button>
+                            <button type="button" class="weather-btn" data-value="Soleggiato"            data-bs-toggle="tooltip" title="Soleggiato"            onclick="selectWeather(this,'morning_desc')">☀️</button>
+                            <button type="button" class="weather-btn" data-value="Parzialmente Nuvoloso" data-bs-toggle="tooltip" title="Parzialmente Nuvoloso" onclick="selectWeather(this,'morning_desc')">⛅</button>
+                            <button type="button" class="weather-btn" data-value="Nuvoloso"              data-bs-toggle="tooltip" title="Nuvoloso"              onclick="selectWeather(this,'morning_desc')">☁️</button>
+                            <button type="button" class="weather-btn" data-value="Pioggia"               data-bs-toggle="tooltip" title="Pioggia"               onclick="selectWeather(this,'morning_desc')">🌧️</button>
+                            <button type="button" class="weather-btn" data-value="Neve"                  data-bs-toggle="tooltip" title="Neve"                  onclick="selectWeather(this,'morning_desc')">❄️</button>
+                            <button type="button" class="weather-btn" data-value="Grandine"              data-bs-toggle="tooltip" title="Grandine"              onclick="selectWeather(this,'morning_desc')">⚽</button>
+                            <button type="button" class="weather-btn" data-value="Temporale"             data-bs-toggle="tooltip" title="Temporale"             onclick="selectWeather(this,'morning_desc')">🌩️</button>
                         </div>
                         <input type="hidden" id="morning_desc" name="morning_desc" required>
                     </div>
 
+                    <!-- Pomeriggio -->
                     <div class="mb-4">
-                        <label class="form-label">Descrizione Meteo - Pomeriggio:</label>
+                        <label class="form-label">Descrizione Meteo — Pomeriggio:</label>
                         <div class="weather-group">
-                            <!-- Soleggiato -->
-                            <button type="button" class="weather-btn" data-value="Soleggiato" data-bs-toggle="tooltip" title="Soleggiato" onclick="selectWeather(this, 'afternoon_desc')">☀️</button>
-                            <!-- Parzialmente Nuvoloso -->
-                            <button type="button" class="weather-btn" data-value="Parzialmente Nuvoloso" data-bs-toggle="tooltip" title="Parzialmente Nuvoloso" onclick="selectWeather(this, 'afternoon_desc')">⛅</button>
-                            <!-- Nuvoloso -->
-                            <button type="button" class="weather-btn" data-value="Nuvoloso" data-bs-toggle="tooltip" title="Nuvoloso" onclick="selectWeather(this, 'afternoon_desc')">☁️</button>
-                            <!-- Pioggia -->
-                            <button type="button" class="weather-btn" data-value="Pioggia" data-bs-toggle="tooltip" title="Pioggia" onclick="selectWeather(this, 'afternoon_desc')">🌧️</button>
-                            <!-- Neve -->
-                            <button type="button" class="weather-btn" data-value="Neve" data-bs-toggle="tooltip" title="Neve" onclick="selectWeather(this, 'afternoon_desc')">❄️</button>
-                            <!-- Grandine -->
-                            <button type="button" class="weather-btn" data-value="Grandine" data-bs-toggle="tooltip" title="Grandine" onclick="selectWeather(this, 'afternoon_desc')">⚽</button>
-                            <!-- Temporale -->
-                            <button type="button" class="weather-btn" data-value="Temporale" data-bs-toggle="tooltip" title="Temporale" onclick="selectWeather(this, 'afternoon_desc')">🌩️</button>
+                            <button type="button" class="weather-btn" data-value="Soleggiato"            data-bs-toggle="tooltip" title="Soleggiato"            onclick="selectWeather(this,'afternoon_desc')">☀️</button>
+                            <button type="button" class="weather-btn" data-value="Parzialmente Nuvoloso" data-bs-toggle="tooltip" title="Parzialmente Nuvoloso" onclick="selectWeather(this,'afternoon_desc')">⛅</button>
+                            <button type="button" class="weather-btn" data-value="Nuvoloso"              data-bs-toggle="tooltip" title="Nuvoloso"              onclick="selectWeather(this,'afternoon_desc')">☁️</button>
+                            <button type="button" class="weather-btn" data-value="Pioggia"               data-bs-toggle="tooltip" title="Pioggia"               onclick="selectWeather(this,'afternoon_desc')">🌧️</button>
+                            <button type="button" class="weather-btn" data-value="Neve"                  data-bs-toggle="tooltip" title="Neve"                  onclick="selectWeather(this,'afternoon_desc')">❄️</button>
+                            <button type="button" class="weather-btn" data-value="Grandine"              data-bs-toggle="tooltip" title="Grandine"              onclick="selectWeather(this,'afternoon_desc')">⚽</button>
+                            <button type="button" class="weather-btn" data-value="Temporale"             data-bs-toggle="tooltip" title="Temporale"             onclick="selectWeather(this,'afternoon_desc')">🌩️</button>
                         </div>
                         <input type="hidden" id="afternoon_desc" name="afternoon_desc" required>
                     </div>
+
                 </div>
 
-                <!-- Colonna della legenda -->
+                <!-- Colonna legenda -->
                 <div class="col-md-4 mb-3">
-                    <div class="card shadow-sm">
+
+                    <!-- Toggle visibile solo su mobile -->
+                    <button type="button" class="legend-toggle" id="legendToggle">
+                        <span>📖 Legenda Meteo</span>
+                        <span class="arrow">▼</span>
+                    </button>
+
+                    <!-- Card legenda -->
+                    <div class="legend-card card shadow-sm" id="legendCard">
                         <div class="card-header bg-secondary text-white">
                             <h5 class="mb-0">Legenda Meteo</h5>
                         </div>
                         <div class="card-body">
-                            <ul class="list-unstyled">
-                                <li><span class="weather-icon">☀️</span> Soleggiato</li>
-                                <li><span class="weather-icon">⛅</span> Parzialmente Nuvoloso</li>
-                                <li><span class="weather-icon">☁️</span> Nuvoloso</li>
-                                <li><span class="weather-icon">🌧️</span> Pioggia</li>
-                                <li><span class="weather-icon">❄️</span> Neve</li>
-                                <li><span class="weather-icon">⚽</span> Grandine (misto pioggia)</li>
-                                <li><span class="weather-icon">🌩️</span> Temporale (misto pioggia)</li>
+                            <ul class="list-unstyled mb-0">
+                                <li>☀️ Soleggiato</li>
+                                <li>⛅ Parzialmente Nuvoloso</li>
+                                <li>☁️ Nuvoloso</li>
+                                <li>🌧️ Pioggia</li>
+                                <li>❄️ Neve</li>
+                                <li>⚽ Grandine (misto pioggia)</li>
+                                <li>🌩️ Temporale (misto pioggia)</li>
                             </ul>
                         </div>
                     </div>
                 </div>
+
+            </div><!-- /row -->
+
+            <!-- Temperature affiancate -->
+            <div class="temp-row mb-4">
+                <div>
+                    <label for="temp_min" class="form-label text-primary"><span class="d-md-none">Temperatura Min (°C):</span><span class="d-none d-md-inline">Temperatura Minima (°C):</span></label>
+                    <input type="number" id="temp_min" name="temp_min" step="0.1" class="form-control" value="0" required>
+                </div>
+                <div>
+                    <label for="temp_max" class="form-label text-danger"><span class="d-md-none">Temperatura Max (°C):</span><span class="d-none d-md-inline">Temperatura Massima (°C):</span></label>
+                    <input type="number" id="temp_max" name="temp_max" step="0.1" class="form-control" value="0" required>
+                </div>
             </div>
 
-
-            <div class="mb-4">
-                <label for="temp_min" class="form-label text-primary">Temperatura Minima (°C):</label>
-                <input type="number" id="temp_min" name="temp_min" step="0.1" class="form-control" value="0" required>
-                <br/>
-                <label for="temp_max" class="form-label text-danger">Temperatura Massima (°C):</label>
-                <input type="number" id="temp_max" name="temp_max" step="0.1" class="form-control" value="0" required>
-            </div>
-
-            <!-- Campo nota facoltativa -->
+            <!-- Nota -->
             <div class="mb-3">
                 <label for="note" class="form-label">Nota (facoltativa):</label>
-                <textarea class="form-control" id="note" name="note" rows="3" placeholder="Inserisci un'allerta meteo o una nota rilevante..."></textarea>
+                <textarea class="form-control" id="note" name="note" rows="3"
+                    placeholder="Inserisci un'allerta meteo o una nota rilevante..."></textarea>
             </div>
 
-            <button type="submit" class="btn btn-primary">Salva Previsione</button>
+            <button type="submit" class="btn btn-primary w-100 mb-4">Salva Previsione</button>
         </form>
     </div>
+
     <script>
+        // Auto-chiudi alert
         setTimeout(function() {
-            let alertBox = document.getElementById('messageAlert');
-            if (alertBox) {
-                let alertInstance = new bootstrap.Alert(alertBox);
-                alertInstance.close();
-            }
+            const alertBox = document.getElementById('messageAlert');
+            if (alertBox) new bootstrap.Alert(alertBox).close();
         }, 3000);
 
-        // Funzione per selezionare il meteo
+        // Selezione meteo
         function selectWeather(button, inputId) {
-            // Rimuovi lo stato "active" dagli altri pulsanti
-            const buttons = button.parentElement.querySelectorAll('.weather-btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
-
-            // Aggiungi lo stato "active" al pulsante selezionato
+            button.parentElement.querySelectorAll('.weather-btn')
+                  .forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
-
-            // Imposta il valore corrispondente nell'input nascosto
             document.getElementById(inputId).value = button.getAttribute('data-value');
         }
 
-         // Verifica se i campi nascosti sono riempiti prima di inviare il form
-         document.getElementById('forecastForm').addEventListener('submit', function (event) {
-            const morningDesc = document.getElementById('morning_desc').value;
-            const afternoonDesc = document.getElementById('afternoon_desc').value;
+        // Toggle legenda — listener separato, non inline
+        document.getElementById('legendToggle').addEventListener('click', function() {
+            this.classList.toggle('open');
+            document.getElementById('legendCard').classList.toggle('visible');
+        });
 
-            if (!morningDesc || !afternoonDesc) {
-                event.preventDefault(); // Impedisce l'invio del form
+        // Validazione form
+        document.getElementById('forecastForm').addEventListener('submit', function(e) {
+            const morning   = document.getElementById('morning_desc').value;
+            const afternoon = document.getElementById('afternoon_desc').value;
+            if (!morning || !afternoon) {
+                e.preventDefault();
                 alert('Per favore, seleziona una descrizione per il mattino e il pomeriggio.');
             }
         });
 
-        document.addEventListener("DOMContentLoaded", function () {
-            // Ottieni i parametri dall'URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const dateParam = urlParams.get("date"); // Prendi il valore di "date" dall'URL
-
-            if (dateParam) {
-                document.querySelector('input[type="date"]').value = dateParam;
-            }
+        // Pre-compila data dall'URL
+        document.addEventListener("DOMContentLoaded", function() {
+            const dateParam = new URLSearchParams(window.location.search).get("date");
+            if (dateParam) document.getElementById('date').value = dateParam;
         });
     </script>
     <script src="./assets/js/main.js"></script>

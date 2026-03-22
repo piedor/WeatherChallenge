@@ -1,0 +1,138 @@
+/* ═══════════════════════════════
+    BOTTONI METEO — BASE
+═══════════════════════════════ */
+
+.weather-group {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.weather-btn {
+    aspect-ratio: 1;
+    width: 100%;
+    min-width: 0;
+    /* CRITICO: permette al grid di restringere il bottone */
+    font-size: 1.5rem;
+    line-height: 1;
+    border: 2px solid #dee2e6;
+    border-radius: 10px;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color .15s, background .15s, transform .1s;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.weather-btn:active {
+    transform: scale(.93);
+}
+
+.weather-btn.active {
+    border-color: #0d6efd;
+    background: #e7f1ff;
+}
+
+
+/* ═══════════════════════════════
+    TEMPERATURE AFFIANCATE
+═══════════════════════════════ */
+
+.temp-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+
+/* ═══════════════════════════════
+    TOGGLE LEGENDA (solo mobile)
+═══════════════════════════════ */
+
+.legend-toggle {
+    display: none;
+}
+
+
+/* ═══════════════════════════════
+    MOBILE ≤ 768px
+═══════════════════════════════ */
+
+@media (max-width: 768px) {
+    h1.page-title {
+        font-size: 1.3rem !important;
+        margin-bottom: 16px !important;
+    }
+    /* Rimuovi il layout a 2 colonne Bootstrap su mobile */
+    .col-md-8,
+    .col-md-4 {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    /* Font bottoni scalato con clamp: mai troppo grande, mai troppo piccolo */
+    .weather-btn {
+        font-size: clamp(0.65rem, 5.5vw, 1.2rem);
+        border-radius: 6px;
+        border-width: 1px;
+    }
+    .weather-group {
+        gap: 3px;
+    }
+    /* Toggle legenda */
+    .legend-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 8px 14px;
+        font-size: .82rem;
+        font-weight: 600;
+        color: #555;
+        cursor: pointer;
+        margin-bottom: 8px;
+    }
+    .legend-toggle .arrow {
+        display: inline-block;
+        transition: transform .2s;
+    }
+    .legend-toggle.open .arrow {
+        transform: rotate(180deg);
+    }
+    /* Legenda nascosta di default su mobile */
+    .legend-card {
+        display: none;
+        margin-bottom: 12px;
+    }
+    .legend-card.visible {
+        display: block;
+    }
+}
+
+
+/* ═══════════════════════════════
+    DESKTOP > 768px
+═══════════════════════════════ */
+
+@media (min-width: 769px) {
+    .legend-toggle {
+        display: none !important;
+    }
+    .legend-card {
+        display: block !important;
+    }
+    .weather-btn {
+        font-size: 1.6rem;
+    }
+}
