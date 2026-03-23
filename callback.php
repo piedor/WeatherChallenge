@@ -12,7 +12,7 @@
     $client = new Google\Client();
     $client->setClientId($_ENV['GOOGLE_CLIENT_ID']); // Sostituisci con l'ID client di Google
     $client->setClientSecret($_ENV['GOOGLE_CLIENT_SECRET']); // Sostituisci con il segreto client di Google
-    $client->setRedirectUri('http://' . $_SERVER['HTTP_HOST'] . '/StazioneMeteo/dashboard/callback.php'); // Modifica con il tuo URI di callback
+    $client->setRedirectUri('https://' . $_SERVER['HTTP_HOST'] . '/StazioneMeteo/dashboard/callback.php'); // Modifica con il tuo URI di callback
 
     // Ottieni il token di acceso
     if (isset($_GET['code'])) {
@@ -42,12 +42,13 @@
             }
 
             // Inserisce o aggiorna l'utente nel database
-            $query = "INSERT INTO users (google_id, email, full_name, role) 
-                    VALUES (?, ?, ?, ?)
+            $query = "INSERT INTO users (google_id, email, full_name, role, last_login) 
+                    VALUES (?, ?, ?, ?, NOW())
                     ON DUPLICATE KEY UPDATE 
                         email = VALUES(email), 
                         full_name = VALUES(full_name),
-                        role = VALUES(role)";
+                        role = VALUES(role),
+                        last_login = NOW()";
             $stmt = $__con->prepare($query);
             $stmt->bind_param("ssss", $googleId, $email, $name, $role);
             $stmt->execute();
