@@ -13,9 +13,9 @@
     <meta name="author" content="Pietro Dorighi">
     <link href="./favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
     <?php require_once './utils/style.php'; ?>
-    <link rel="stylesheet" href="./assets/css/style_app.css">
-    <link rel="stylesheet" href="./assets/css/style_dashboard.css">
-    <link rel="stylesheet" href="./assets/css/style_insert_forecast.css">
+    <link rel="stylesheet" href="./assets/css/style_app.css?v=2">
+    <link rel="stylesheet" href="./assets/css/style_dashboard.css?v=2">
+    <link rel="stylesheet" href="./assets/css/style_insert_forecast.css?v=2">
 </head>
 <body class="bg-light">
     <?php require('./utils/header.php'); ?>
@@ -166,6 +166,6 @@
             if (dateParam) document.getElementById('date').value = dateParam;
         });
     </script>
-    <script src="./assets/js/main.js"></script>
+    <script src="./assets/js/main.js?v=2"></script>
 </body>
 </html>
