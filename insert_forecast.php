@@ -160,6 +160,16 @@
             }
         });
 
+        // Validazione temperature
+        document.getElementById('forecastForm').addEventListener('submit', function(e) {
+            const tempMin = parseFloat(document.getElementById('temp_min').value);
+            const tempMax = parseFloat(document.getElementById('temp_max').value);
+            if (tempMin > tempMax) {
+                e.preventDefault();
+                alert('Errore: La temperatura minima non può essere maggiore della massima.');
+            }
+        });
+
         // Pre-compila data dall'URL
         document.addEventListener("DOMContentLoaded", function() {
             const dateParam = new URLSearchParams(window.location.search).get("date");

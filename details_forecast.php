@@ -80,7 +80,7 @@
         <meta name="author" content="Pietro Dorighi">
         <link href="./favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
         <script src="./assets/dist/js/highcharts/highcharts.js"></script>
-        <?php require_once './utils/style.php?v=2'; ?>
+        <?php require_once './utils/style.php'; ?>
         <link rel="stylesheet" href="./assets/css/style_app.css?v=2">
         <link rel="stylesheet" href="./assets/css/style_dashboard.css?v=2">
         <style>
