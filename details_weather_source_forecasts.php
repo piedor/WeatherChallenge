@@ -94,9 +94,9 @@
         <meta name="author" content="Pietro Dorighi">
         <link href="./favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
         <script src="./assets/dist/js/highcharts/highcharts.js"></script>
-        <?php require_once './utils/style.php'; ?>
-        <link rel="stylesheet" href="./assets/css/style_app.css">
-        <link rel="stylesheet" href="./assets/css/style_dashboard.css">
+        <?php require_once './utils/style.php?v=2'; ?>
+        <link rel="stylesheet" href="./assets/css/style_app.css?v=2">
+        <link rel="stylesheet" href="./assets/css/style_dashboard.css?v=2">
         <style>
             .card-stat { border: none; border-top: 4px solid; }
             .card-max { border-top-color: #dc3545; }
@@ -252,6 +252,6 @@
                 createWeatherDetailsChart("weatherChart", hours, icons, temps);
             });
         </script>
-        <script src="./assets/js/main.js"></script>
+        <script src="./assets/js/main.js?v=2"></script>
     </body>
 </html>

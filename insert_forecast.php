@@ -109,11 +109,11 @@
             <!-- Temperature affiancate -->
             <div class="temp-row mb-4">
                 <div>
-                    <label for="temp_min" class="form-label text-primary"><span class="d-md-none">Temperatura Min (°C):</span><span class="d-none d-md-inline">Temperatura Minima (°C):</span></label>
+                    <label for="temp_min" class="form-label text-primary"><span class="d-md-none">Temp Min (°C):</span><span class="d-none d-md-inline">Temperatura Minima (°C):</span></label>
                     <input type="number" id="temp_min" name="temp_min" step="0.1" class="form-control" value="0" required>
                 </div>
                 <div>
-                    <label for="temp_max" class="form-label text-danger"><span class="d-md-none">Temperatura Max (°C):</span><span class="d-none d-md-inline">Temperatura Massima (°C):</span></label>
+                    <label for="temp_max" class="form-label text-danger"><span class="d-md-none">Temp Max (°C):</span><span class="d-none d-md-inline">Temperatura Massima (°C):</span></label>
                     <input type="number" id="temp_max" name="temp_max" step="0.1" class="form-control" value="0" required>
                 </div>
             </div>
