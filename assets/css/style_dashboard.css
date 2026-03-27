@@ -80,7 +80,7 @@
     left: -200px;
     width: 120px;
     height: 80px;
-    background: url('assets/img/cloud.png') no-repeat center/contain;
+    background: url('../img/cloud.png') no-repeat center/contain;
     opacity: .8;
     animation: moveClouds 30s linear infinite;
     pointer-events: none;
