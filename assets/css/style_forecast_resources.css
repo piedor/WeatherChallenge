@@ -1,0 +1,135 @@
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+    padding-bottom: 40px;
+}
+
+.tool-card {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, .08);
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+    transition: transform .18s, box-shadow .18s;
+    -webkit-tap-highlight-color: transparent;
+    border: 1px solid #e9ecef;
+}
+
+.tool-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, .13);
+    color: inherit;
+    text-decoration: none;
+}
+
+.tool-card:active {
+    transform: scale(.98);
+}
+
+
+/* Banner colorato in cima alla card */
+
+.tool-card-banner {
+    height: 6px;
+    width: 100%;
+}
+
+.tool-card-body {
+    padding: 18px 20px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.tool-card-icon {
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.tool-card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0;
+}
+
+.tool-card-desc {
+    font-size: .82rem;
+    color: #6c757d;
+    line-height: 1.5;
+    flex: 1;
+}
+
+.tool-card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: .78rem;
+    font-weight: 700;
+    color: #0d6efd;
+    margin-top: 4px;
+}
+
+
+/* Card in evidenza (spaghetti — quella più usata) */
+
+.tool-card.featured {
+    border: 2px solid #0d6efd;
+    background: #f8fbff;
+}
+
+.tool-card.featured .tool-card-title {
+    color: #0d6efd;
+}
+
+.featured-badge {
+    display: inline-block;
+    background: #0d6efd;
+    color: #fff;
+    font-size: .65rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+
+/* Mobile */
+
+@media (max-width: 768px) {
+    .tools-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin-top: 16px;
+    }
+    .tool-card {
+        flex-direction: row;
+        border-radius: 14px;
+    }
+    .tool-card-banner {
+        width: 6px;
+        height: auto;
+        min-height: 100%;
+        border-radius: 0;
+    }
+    .tool-card-body {
+        padding: 14px 16px;
+        gap: 4px;
+    }
+    .tool-card-icon {
+        font-size: 1.6rem;
+    }
+    .tool-card-title {
+        font-size: .95rem;
+    }
+    .tool-card-desc {
+        font-size: .78rem;
+    }
+}
