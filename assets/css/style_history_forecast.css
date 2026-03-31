@@ -1,0 +1,101 @@
+/* ── Card mobile — nascosta su desktop ── */
+
+.forecast-cards {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    /* Nascondi tabella, mostra card */
+    .forecast-table {
+        display: none;
+    }
+    .forecast-cards {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .f-card {
+        background: #fff;
+        border-radius: 14px;
+        padding: 14px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, .07);
+    }
+    /* Riga superiore: data + badge accuratezza */
+    .f-card-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    .f-card-date {
+        font-size: .95rem;
+        font-weight: 800;
+        color: #333;
+    }
+    .f-acc-badge {
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: .75rem;
+        font-weight: 800;
+        color: #fff;
+    }
+    .f-acc-badge.green {
+        background: #22c55e;
+    }
+    .f-acc-badge.red {
+        background: #ef4444;
+    }
+    .f-acc-badge.yellow {
+        background: #f59e0b;
+    }
+    .f-acc-badge.gray {
+        background: #aaa;
+    }
+    /* Griglia info: 2 colonne */
+    .f-card-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px 12px;
+        margin-bottom: 10px;
+    }
+    .f-card-item label {
+        font-size: .62rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: #aaa;
+        display: block;
+    }
+    .f-card-item span {
+        font-size: .88rem;
+        font-weight: 600;
+        color: #333;
+    }
+    .f-card-item span.temp-max {
+        color: #dc3545;
+    }
+    .f-card-item span.temp-min {
+        color: #0d6efd;
+    }
+    /* Nota */
+    .f-card-note {
+        font-size: .75rem;
+        color: #888;
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 6px 10px;
+        margin-bottom: 10px;
+    }
+    /* Bottoni azioni */
+    .f-card-actions {
+        display: flex;
+        gap: 8px;
+    }
+    .f-card-actions a {
+        flex: 1;
+        text-align: center;
+        font-size: .78rem;
+        padding: 7px 0;
+        border-radius: 8px;
+    }
+}
