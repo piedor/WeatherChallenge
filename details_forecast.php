@@ -95,7 +95,7 @@
     <body class="bg-light">
         <?php require ('./utils/header.php'); ?>
         
-        <div class="container-fluid container-md mt-3 pb-5">
+        <div class="container-fluid container-md">
             <div class="card shadow-sm mb-4">
                 <div class="card-header bg-info text-white">
                     <h4 class="mb-0">Dati Reali - <?= date("d/m/Y", strtotime($forecast['date'])) ?></h4>

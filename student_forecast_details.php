@@ -94,7 +94,7 @@
         </div>
     <?php endif; ?>
 
-    <div class="container mt-4">
+    <div class="container py-2 px-2">
         <h2 class="sfd-title mb-3">📅 Previsioni di <?= htmlspecialchars($student['full_name']) ?></h2>
 
         <!-- ══════ DESKTOP ══════ -->
