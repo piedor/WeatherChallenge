@@ -90,7 +90,7 @@
     </button>
 
     <!-- Dropdown profilo a destra -->
-    <div class="dropdown bn-profile-wrap" style="flex:1; display:flex; align-items:stretch;">
+    <div class="dropdown bn-profile-wrap" style="flex:1; display:flex; align-items:center;">
         <button class="bn-profile w-100" type="button"
                 id="userDropdownMobile" data-bs-toggle="dropdown" aria-expanded="false">
             <img src="<?= htmlspecialchars($_SESSION['user']['picture']) ?>" alt="Foto profilo">
