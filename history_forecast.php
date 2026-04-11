@@ -42,7 +42,7 @@
             </div>
         <?php endif; ?>
 
-        <div class="container mt-4">
+        <div class="container">
             <div class="card shadow-sm">
                 <div class="card-header text-white bg-secondary">
                     <h4 class="mb-0">Le tue previsioni precedenti</h4>

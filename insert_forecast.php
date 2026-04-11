@@ -27,7 +27,7 @@
         </div>
     <?php endif; ?>
 
-    <div class="container">
+    <div class="container pt-2 px-2">
         <h1 class="page-title text-center mb-4">Inserisci la tua Previsione Meteo</h1>
 
         <form id="forecastForm" method="POST" action="save_forecast.php">
@@ -38,7 +38,7 @@
                 <input type="date" id="date" name="date" class="form-control" required>
             </div>
 
-            <div class="row g-3">
+            <div class="row g-3 px-2">
 
                 <!-- Colonna bottoni -->
                 <div class="col-md-8">

@@ -79,7 +79,7 @@
         </div>
     <?php endif; ?>
 
-    <div class="container mt-4">
+    <div class="container py-2">
         <h2 class="wsf-title mb-3">📅 Previsioni di <?= htmlspecialchars($weatherSource['name']) ?></h2>
         <?= $weatherSource['attribution'] ?>
 

@@ -40,7 +40,7 @@
     </div>
     <?php endif; ?>
     
-    <div class="container mt-4">
+    <div class="container py-2 px-2">
         <h2 class="text-center mb-4">📋 Elenco Siti Meteo - Classifica Accuratezza</h2>
         <ul class="list-group">
             <?php while ($row = $result->fetch_assoc()): ?>

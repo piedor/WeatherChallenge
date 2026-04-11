@@ -57,7 +57,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Chiudi"></button>
         </div>
     <?php endif; ?>
-    <div class="container">
+    <div class="container py-2 px-2">
         <h2 class="text-center">⚙️ Impostazioni Profilo</h2>
         <?php if (isset($_GET['success'])): ?>
             <p style="color: green;">Nome del meteo aggiornato con successo!</p>

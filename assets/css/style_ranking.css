@@ -20,7 +20,6 @@ body {
 .ranking-container {
     max-width: 680px;
     margin: 0 auto;
-    padding: 1.5rem 1rem 3rem;
 }
 
 
@@ -89,10 +88,10 @@ h1.rank-title {
 }
 
 .podium-name {
-    font-size: .72rem;
+    font-size: .82rem;
     font-weight: 800;
     text-align: center;
-    color: #1e293b;
+    color: #94a3b8;
     line-height: 1.2;
     margin-bottom: 4px;
 }
@@ -244,7 +243,7 @@ h1.rank-title {
         font-size: 1.2rem;
     }
     .podium-name {
-        font-size: .65rem;
+        font-size: .82rem;
     }
     .user-rank {
         padding: 10px 12px;

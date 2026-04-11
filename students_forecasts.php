@@ -46,7 +46,7 @@
     </div>
     <?php endif; ?>
     
-    <div class="container mt-4">
+    <div class="container pt-2 px-2">
         <h2 class="text-center mb-4">📋 Elenco Studenti - Classifica Accuratezza</h2>
         <ul class="list-group">
             <?php while ($row = $result->fetch_assoc()): ?>

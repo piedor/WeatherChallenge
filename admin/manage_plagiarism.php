@@ -41,7 +41,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Chiudi"></button>
         </div>
     <?php endif; ?>
-    <div class="container">
+    <div class="container pt-2 px-2">
         <h2 class="mb-4">Gestione Segnalazioni di Plagio</h2>
 
         <table class="table table-striped table-hover">

@@ -17,8 +17,8 @@
 <body>
     <?php require('./utils/header.php'); ?>
 
-    <div class="container py-3">
-        <div class="title-wrap mb-3">
+    <div class="container p-3">
+        <div class="title-wrap">
             <h1 class="video-title">Previsioni Meteo a Video</h1>
         </div>
 

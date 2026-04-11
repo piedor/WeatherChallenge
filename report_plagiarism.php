@@ -52,7 +52,7 @@
     </div>
     <?php endif; ?>
     
-    <div class="container mt-4">
+    <div class="container py-2 px-2">
         <div class="card shadow-sm">
             <div class="card-header">
                 <h2>Segnalazione Previsione Sospetta</h2>

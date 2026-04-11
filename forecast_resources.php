@@ -27,7 +27,7 @@
         </div>
     <?php endif; ?>
 
-    <div class="container">
+    <div class="container pt-2 px-2">
         <h2 class="text-center mt-3">🛠️ Strumenti per le Previsioni Meteo</h2>
         <p class="text-center text-muted">Tocca uno strumento per aprirlo direttamente.</p>
 

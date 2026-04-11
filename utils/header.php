@@ -1,4 +1,4 @@
-<div class="header mb-3">
+<div class="header mb-1">
     <h1 id="weather-title" style="font-family: 'Raleway', sans-serif; 
                             text-align: center; 
                             font-weight: bold; 
