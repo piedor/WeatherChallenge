@@ -47,7 +47,7 @@
             $event['color'] = '#FFD700';
         } elseif ($row['accuracy'] > 0 || $dateForecast < $dateToday) {
             $event['title'] = $row['accuracy'] . '%' . ($row['is_reported'] ? ' ⚠️' : '');
-            $event['url']   = 'details_forecast.php?id=' . $idForecast;
+            $event['url']   = 'details_forecast.php?id=' . $idForecast . '&from=students';
         }
 
         if ($row['note'] !== '') $event['description'] = '📝 Nota presente';
@@ -134,7 +134,7 @@
                         <?php if ($isFuture): ?>
                             <button class="btn btn-sm btn-secondary" disabled title="Non ancora valutata">⏳</button>
                         <?php else: ?>
-                            <a class="btn btn-sm btn-outline-info" href="details_forecast.php?id=<?= $row['id'] ?>">🔍</a>
+                            <a class="btn btn-sm btn-outline-info" href="details_forecast.php?id=<?= $row['id'] ?>&from=students">🔍</a>
                         <?php endif; ?>
                     </td>
                 </tr>
@@ -228,7 +228,7 @@
 
                     <?php if ($isPast): ?>
                     <div class="sfd-card-actions">
-                        <a href="details_forecast.php?id=<?= $row['id'] ?>"
+                        <a href="details_forecast.php?id=<?= $row['id'] ?>&from=students"
                            class="btn btn-outline-info btn-sm">🔍 Dettagli</a>
                     </div>
                     <?php endif; ?>

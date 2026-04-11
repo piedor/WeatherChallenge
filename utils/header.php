@@ -84,13 +84,13 @@
 <nav class="bottom-nav">
 
     <!-- Bottone Menu a sinistra -->
-    <button class="bn-menu" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuSidebar">
+    <button class="bn-menu" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuSidebarMobile">
         <span class="bn-icon">☰</span>
         <span>Menu</span>
     </button>
 
     <!-- Dropdown profilo a destra -->
-    <div class="dropdown bn-profile-wrap" style="flex:1; display:flex; align-items:center;">
+    <div class="dropdown bn-profile-wrap" style="flex:1; display:flex; align-items:stretch;">
         <button class="bn-profile w-100" type="button"
                 id="userDropdownMobile" data-bs-toggle="dropdown" aria-expanded="false">
             <img src="<?= htmlspecialchars($_SESSION['user']['picture']) ?>" alt="Foto profilo">
