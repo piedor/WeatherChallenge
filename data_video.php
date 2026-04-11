@@ -1,230 +1,177 @@
+<?php
+    include 'utils/check_session.php';
+?>
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Previsioni Studenti</title>
+    <title>Previsioni Meteo a Video</title>
     <meta name="description" content="WebApp previsioni meteo">
     <meta name="author" content="Pietro Dorighi">
     <link href="./favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
     <?php require_once './utils/style.php'; ?>
-    <link rel="stylesheet" href="./assets/css/style_app.css">
-    <link rel="stylesheet" href="./assets/css/style_video.css">
-    
-    <style>
-        /* Stile per il podio */
-        .top-student {
-            font-size: 1.2em;
-            font-weight: bold;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            animation: bounce 2s infinite;
-        }
-
-        .progress {
-            height: 15px;
-            border-radius: 10px;
-            margin-top: 10px;
-        }
-
-        .forecast-block {
-            border-radius: 10px;
-            padding: 15px;
-            margin: 10px;
-            text-align: center;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-            opacity: 0;
-            animation: fadeIn 1s forwards;
-        }
-
-        .forecast-block.empty {
-            background: #f8f9fa;
-            color: #6c757d;
-            font-style: italic;
-            opacity: 0.7;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-        @keyframes typing {
-    from { width: 0; }
-    to { width: 100%; }
-}
-
-@keyframes blink {
-    50% { border-color: transparent; }
-}
-
-.animated-title {
-    font-size: 2em;
-    font-weight: bold;
-    overflow: hidden;
-    white-space: nowrap;
-    width: 0;
-    display: inline-block;
-    border-right: 3px solid orange;
-    animation: typing 3s steps(30, end) forwards, blink 0.7s infinite;
-}
-
-
-    </style>
+    <link rel="stylesheet" href="./assets/css/style_app.css?v=1">
+    <link rel="stylesheet" href="./assets/css/style_video.css?v=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Raleway:wght@700;900&display=swap" rel="stylesheet">
 </head>
-
 <body>
-    <?php require ('./utils/menu.php'); ?>
-    <div class="container">
-        <h1 class="text-center mb-4 animated-title">Previsioni Meteo a Video</h1>
-        <div id="forecast-container" class="student-group">
-            <p class="text-center text-muted">Caricamento in corso...</p>
+    <?php require('./utils/header.php'); ?>
+
+    <div class="container py-3">
+        <div class="title-wrap mb-3">
+            <h1 class="video-title">Previsioni Meteo a Video</h1>
         </div>
+
+        <div id="forecast-container"></div>
+        <p class="last-update" id="last-update"></p>
     </div>
 
     <script>
-        function getNextFiveDates() {
-            const dates = [];
-            const days = ["DOM", "LUN", "MAR", "MER", "GIO", "VEN", "SAB"];
-            const today = new Date();
+    const DAYS = ["DOM","LUN","MAR","MER","GIO","VEN","SAB"];
 
-            for (let i = 0; i < 5; i++) {
-                let futureDate = new Date();
-                futureDate.setDate(today.getDate() + i);
-                let formattedDate = futureDate.toLocaleDateString("it-IT");
-                let dayName = days[futureDate.getDay()];
-                dates.push({ date: formattedDate, day: dayName });
-            }
-            return dates;
+    function getNextFiveDates() {
+        const today = new Date();
+        return Array.from({ length: 5 }, (_, i) => {
+            const d = new Date();
+            d.setDate(today.getDate() + i);
+            return {
+                date: d.toLocaleDateString('it-IT'),
+                day:  DAYS[d.getDay()]
+            };
+        });
+    }
+
+    const weatherIcons = {
+        'soleggiato':            '☀️',
+        'nuvoloso':              '☁️',
+        'parzialmente nuvoloso': '⛅',
+        'pioggia':               '🌧️',
+        'neve':                  '❄️',
+        'grandine':              '⚽',
+        'temporale':             '🌩️',
+    };
+    const getIcon = desc => weatherIcons[desc?.toLowerCase()] ?? '🌈';
+
+    const scoreColor = s => s >= 80 ? 'var(--green)' : s >= 60 ? 'var(--orange)' : 'var(--red)';
+
+    const medals = ['🥇','🥈','🥉'];
+    const badgeClass = rank => rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : 'normal';
+
+    function groupByStudent(forecasts) {
+        return forecasts.reduce((g, f) => {
+            if (!g[f.full_name]) g[f.full_name] = [];
+            g[f.full_name].push(f);
+            return g;
+        }, {});
+    }
+
+    async function loadForecasts() {
+        const response  = await fetch('get_forecasts.php');
+        const forecasts = await response.json();
+        const container = document.getElementById('forecast-container');
+        container.innerHTML = '';
+
+        if (!forecasts.length) {
+            container.innerHTML = '<p class="text-center text-muted">Nessuna previsione disponibile.</p>';
+            return;
         }
 
-        async function loadForecasts() {
-            const response = await fetch('get_forecasts.php');
-            const forecasts = await response.json();
-            const forecastContainer = document.getElementById('forecast-container');
+        const grouped = groupByStudent(forecasts);
+        const dates   = getNextFiveDates();
+        let rank = 1;
 
-            forecastContainer.innerHTML = '';
+        for (const studentName in grouped) {
+            const score  = grouped[studentName][0].score;
+            const color  = scoreColor(score);
+            const medal  = medals[rank - 1] ?? `${rank}°`;
+            const bClass = badgeClass(rank);
+            const delay  = (rank - 1) * 0.08;
 
-            if (forecasts.length > 0) {
-                const groupedForecasts = groupByStudent(forecasts);
-                let rank = 1;
+            // Card
+            const card = document.createElement('div');
+            card.className = 'student-card';
+            card.style.animationDelay = `${delay}s`;
 
-                for (const student in groupedForecasts) {
-                    const score = groupedForecasts[student][0].score;
-
-                    const studentGroup = document.createElement('div');
-                    studentGroup.classList.add('student-group');
-
-                    const studentName = `
-                        <div class="student-name ${rank <= 3 ? 'top-student' : ''}" 
-                            style="background-color: ${getBackgroundColor(rank)}; padding: 10px; border-radius: 8px;">
-                            ${getRankingIcon(rank)} <strong>${student}</strong> 
-                            <span style="color: ${getscoreColor(score)};">
-                                (Affidabilità: ${score.toFixed(2)}%)
-                            </span>
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" 
-                                     style="width: ${score}%; background-color: ${getscoreColor(score)};" 
-                                     aria-valuenow="${score}" aria-valuemin="0" aria-valuemax="100">
-                                    ${score.toFixed(2)}%
-                                </div>
+            // Header
+            card.innerHTML = `
+                <div class="student-header">
+                    <div class="student-medal">${medal}</div>
+                    <div class="student-meta">
+                        <div class="student-name">${studentName}</div>
+                        <div class="student-score-line">
+                            <div class="score-bar-wrap">
+                                <div class="score-bar" style="width:${score}%; background:${color};"></div>
                             </div>
-                        </div>`;
+                            <span class="score-label" style="color:${color}">${score.toFixed(1)}%</span>
+                        </div>
+                    </div>
+                </div>
+            `;
 
-                    studentGroup.innerHTML += studentName;
-                    const forecastRow = document.createElement('div');
-                    forecastRow.classList.add('forecast-container');
+            // Griglia previsioni
+            const grid = document.createElement('div');
+            grid.className = 'forecast-grid';
 
-                    const allDates = getNextFiveDates();
+            dates.forEach(({ date, day }, i) => {
+                const f    = grouped[studentName].find(x => x.date === date);
+                const cell = document.createElement('div');
+                cell.style.animationDelay = `${delay + i * 0.05}s`;
 
-                    allDates.forEach(({ date, day }) => {
-                        const forecast = groupedForecasts[student].find(f => f.date === date);
-
-                        if (forecast) {
-                            const icon = getWeatherIcon(forecast.morning_desc);
-                            forecastRow.innerHTML += `
-                                <div class="forecast-block">
-                                    <div class="forecast-date"><strong>${date} (${day})</strong></div>
-                                    <div class="forecast-icon">${icon}</div>
-                                    <div class="forecast-details">
-                                        Mattina: ${forecast.morning_desc}<br>
-                                        Pomeriggio: ${forecast.afternoon_desc}<br>
-                                        Temp Min: ${forecast.temp_min}°C <br>
-                                        Temp Max: ${forecast.temp_max}°C <br>
-                                        ${forecast.note ? `<br><em style="color: #e67e22;">📝: ${forecast.note}</em>` : ''}
-                                    </div>
-                                </div>
-                            `;
-                        } else {
-                            forecastRow.innerHTML += `
-                                <div class="forecast-block empty">
-                                    <div class="forecast-date"><strong>${date} (${day})</strong></div>
-                                    <div class="forecast-icon">📭</div>
-                                    <div class="forecast-details">Nessuna previsione</div>
-                                </div>
-                            `;
-                        }
-                    });
-
-                    studentGroup.appendChild(forecastRow);
-                    forecastContainer.appendChild(studentGroup);
-                    rank++;
+                if (f) {
+                    cell.className = 'forecast-cell';
+                    cell.innerHTML = `
+                        <div class="fc-day">${day}</div>
+                        <div class="fc-date">${date}</div>
+                        <div class="fc-weather-row">
+                            <div class="fc-period morning">
+                                <span class="fc-period-label">Matt</span>
+                                <span class="fc-period-icon">${getIcon(f.morning_desc)}</span>
+                            </div>
+                            <div class="fc-period afternoon">
+                                <span class="fc-period-label">Pom</span>
+                                <span class="fc-period-icon">${getIcon(f.afternoon_desc)}</span>
+                            </div>
+                        </div>
+                        <div class="fc-temp">
+                            <span class="tmax">↑${f.temp_max}°</span>
+                            <span class="tmin"> ↓${f.temp_min}°</span>
+                        </div>
+                        ${f.note ? `<div class="fc-note">📝 ${f.note}</div>` : ''}
+                    `;
+                } else {
+                    cell.className = 'forecast-cell empty';
+                    cell.innerHTML = `
+                        <div class="fc-day">${day}</div>
+                        <div class="fc-date">${date}</div>
+                        <div class="fc-weather-row">
+                            <div class="fc-period morning">
+                                <span class="fc-period-label">Matt</span>
+                                <span class="fc-period-icon">📭</span>
+                            </div>
+                            <div class="fc-period afternoon">
+                                <span class="fc-period-label">Pom</span>
+                                <span class="fc-period-icon">📭</span>
+                            </div>
+                        </div>
+                    `;
                 }
-            } else {
-                forecastContainer.innerHTML = '<p class="text-center text-muted">Non ci sono previsioni disponibili.</p>';
-            }
+                grid.appendChild(cell);
+            });
+
+            card.appendChild(grid);
+            container.appendChild(card);
+            rank++;
         }
 
-        function groupByStudent(forecasts) {
-            return forecasts.reduce((groups, forecast) => {
-                const { full_name } = forecast;
-                if (!groups[full_name]) {
-                    groups[full_name] = [];
-                }
-                groups[full_name].push(forecast);
-                return groups;
-            }, {});
-        }
+        document.getElementById('last-update').textContent =
+            'Aggiornato alle ' + new Date().toLocaleTimeString('it-IT');
+    }
 
-        function getWeatherIcon(description) {
-            if (description.toLowerCase() === 'soleggiato') return '☀️';
-            if (description.toLowerCase() === 'nuvoloso') return '☁️';
-            if (description.toLowerCase() === 'parzialmente nuvoloso') return '⛅';
-            if (description.toLowerCase() === 'pioggia') return '🌧️';
-            if (description.toLowerCase() === 'neve') return '❄️';
-            if (description.toLowerCase() === 'grandine') return '⚽';
-            if (description.toLowerCase() === 'temporale') return '🌩️';
-            return '🌈';
-        }
-
-        function getscoreColor(score) {
-            if (score >= 80) return "green";
-            if (score >= 60) return "orange";
-            return "red";
-        }
-
-        function getBackgroundColor(rank) {
-            if (rank === 1) return "#FFD700";  
-            if (rank === 2) return "#C0C0C0";  
-            if (rank === 3) return "#CD7F32";  
-            return "white";
-        }
-
-        function getRankingIcon(rank) {
-            if (rank === 1) return "🏆";
-            if (rank === 2) return "🥈";
-            if (rank === 3) return "🥉";
-            return rank + "° ";
-        }
-
-        setInterval(loadForecasts, 60000);
-        loadForecasts();
+    loadForecasts();
     </script>
-    <script src="./assets/js/main.js"></script>
+    <script src="./assets/js/main.js?v=2"></script>
 </body>
 </html>
