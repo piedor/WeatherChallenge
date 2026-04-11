@@ -11,11 +11,9 @@
     <meta name="author" content="Pietro Dorighi">
     <link href="./favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
     <?php require_once './utils/style.php'; ?>
-    <link rel="stylesheet" href="./assets/css/style_app.css?v=1">
-    <link rel="stylesheet" href="./assets/css/style_video.css?v=1">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Raleway:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/css/style_app.css?v=<?php echo filemtime('assets/css/style_app.css'); ?>">
+    <link rel="stylesheet" href="./assets/css/style_dashboard.css?v=<?php echo filemtime('assets/css/style_dashboard.css'); ?>">
+    <link rel="stylesheet" href="./assets/css/style_video.css?v=<?php echo filemtime('assets/css/style_video.css'); ?>">
 </head>
 <body>
     <?php require('./utils/header.php'); ?>

@@ -1,4 +1,5 @@
 /* Stile per i pulsanti meteo */
+
 body {
     font-family: 'Roboto', sans-serif;
     background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
@@ -7,6 +8,7 @@ body {
     margin: 0;
     min-height: 100vh;
 }
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -58,38 +60,48 @@ body {
     transform: scale(1.1);
 }
 
+
+/* ── HEADER (desktop) ── */
+
 .header {
     display: flex;
-    justify-content: center; /* Centra il testo */
+    justify-content: center;
     align-items: center;
-    position: relative; /* Permette di posizionare il dropdown */
+    position: relative;
 }
+
 .dropdown {
     position: absolute;
-    right: 20px; /* Sposta il menu a destra */
+    right: 20px;
 }
+
 .btn-menu {
     position: absolute;
-    left: 20px; /* Sposta il menu a destra */
+    left: 20px;
 }
+
 .dropdown-menu {
-    width: 280px; /* Imposta larghezza maggiore */
+    width: 280px;
     padding: 15px;
 }
+
 .user-info {
     display: flex;
     align-items: center;
     gap: 10px;
 }
+
 .user-info img {
     border-radius: 50%;
     width: 50px;
     height: 50px;
 }
+
 .user-email {
     font-size: 14px;
     color: gray;
 }
+
 .accuracy-bar {
     height: 10px;
     background-color: #e9ecef;
@@ -97,30 +109,111 @@ body {
     overflow: hidden;
     margin-top: 5px;
 }
+
 .accuracy-fill {
     height: 100%;
     background-color: #007bff;
 }
-@media (max-width: 768px) {  
+
+
+/* ── BOTTOM NAV (solo mobile) ── */
+
+.bottom-nav {
+    display: none;
+}
+
+
+/* ═══════════════════════════════════════════════
+   MOBILE ≤ 768px
+═══════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+    /* Spazio in fondo per non finire sotto la bottom nav */
+    body {
+        padding-bottom: 70px;
+    }
+    /* ── Header: solo titolo, niente bottoni ── */
     .header {
-        flex-direction: column; /* Dispone il testo e il pulsante in colonna */
-        align-items: center; /* Centra il contenuto */
-        text-align: center;
-    }
-
-    .dropdown {
-        position: static; /* Rimuove il posizionamento assoluto */
-        margin-top: 15px; /* Aggiunge spazio tra il testo e il pulsante */
-        display: flex;
         justify-content: center;
-        width: 100%;
+        padding: 10px 16px;
     }
-
-    .btn-menu {
-        position: static; /* Rimuove il posizionamento assoluto */
-        margin-top: 15px; /* Aggiunge spazio tra il testo e il pulsante */
+    .header .btn-menu {
+        display: none;
+    }
+    .header .dropdown {
+        display: none;
+    }
+    /* ── Bottom navigation bar ── */
+    .bottom-nav {
         display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: #fff;
+        border-top: 1px solid #e2e8f0;
+        box-shadow: 0 -4px 16px rgba(0, 0, 0, .08);
+        z-index: 1050;
+        align-items: stretch;
+    }
+    /* Bottone menu a sinistra */
+    .bottom-nav .bn-menu {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         justify-content: center;
-        width: 100%;
+        gap: 2px;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        font-size: .65rem;
+        font-weight: 700;
+        color: #64748b;
+        padding: 0;
+        border-right: 1px solid #e2e8f0;
+    }
+    .bottom-nav .bn-menu .bn-icon {
+        font-size: 1.3rem;
+        line-height: 1;
+    }
+    /* Dropdown profilo a destra */
+    .bottom-nav .bn-profile {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        font-size: .65rem;
+        font-weight: 700;
+        color: #64748b;
+        padding: 0;
+    }
+    .bottom-nav .bn-profile img {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    .bottom-nav .bn-profile .bn-label {
+        font-size: .6rem;
+        font-weight: 700;
+        color: #64748b;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 80px;
+    }
+    /* Il dropdown Bootstrap si apre verso l'alto */
+    .bottom-nav .dropdown-menu {
+        bottom: 60px !important;
+        top: auto !important;
+        transform: none !important;
+        margin-bottom: 4px;
     }
 }

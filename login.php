@@ -8,8 +8,8 @@
         <meta name="author" content="Pietro Dorighi">
         <link href="./favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
         <?php require_once './utils/style.php'; ?>
-        <link rel="stylesheet" href="./assets/css/style_login.css">
-        <link rel="stylesheet" href="./assets/css/style.css">
+        <link rel="stylesheet" href="./assets/css/style_login.css?v=<?php echo filemtime('assets/css/style_login.css'); ?>">
+        <link rel="stylesheet" href="./assets/css/style.css?v=<?php echo filemtime('assets/css/style.css'); ?>">
     </head>
     <body>
 

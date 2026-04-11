@@ -27,8 +27,8 @@
     <meta name="author" content="Pietro Dorighi">
     <link href="./favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
     <?php require_once './utils/style.php'; ?>
-    <link rel="stylesheet" href="./assets/css/style_app.css">
-    <link rel="stylesheet" href="./assets/css/style_dashboard.css">
+    <link rel="stylesheet" href="./assets/css/style_app.css?v=<?php echo filemtime('assets/css/style_app.css'); ?>">
+    <link rel="stylesheet" href="./assets/css/style_dashboard.css?v=<?php echo filemtime('assets/css/style_dashboard.css'); ?>">
     <!-- Intro.js -->
     <script src="https://cdn.jsdelivr.net/npm/intro.js@7.2.0/intro.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css" rel="stylesheet">

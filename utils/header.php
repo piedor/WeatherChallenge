@@ -21,7 +21,8 @@
         }
         window.onload = typeEffect;
     </script>
-    <!-- Profilo utente con tendina -->
+
+    <!-- Profilo utente con tendina (desktop) -->
     <div class="dropdown">
         <button class="btn btn-light dropdown-toggle d-flex align-items-center" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
             <img src="<?= htmlspecialchars($_SESSION['user']['picture']) ?>" alt="Foto profilo" class="rounded-circle" width="40" height="40">
@@ -48,23 +49,17 @@
             </li>
 
             <?php if ($user['consistency_bonus'] > 0): ?>
-                <span class="badge bg-success">
-                    +<?= $user['consistency_bonus'] ?>% costanza
-                </span>
+                <span class="badge bg-success">+<?= $user['consistency_bonus'] ?>% costanza</span>
             <?php endif; ?>
             <?php if ($user['positive_series_bonus'] > 0): ?>
-                <span class="badge bg-success">
-                    +<?= $user['positive_series_bonus'] ?>% serie accurate
-                </span>
+                <span class="badge bg-success">+<?= $user['positive_series_bonus'] ?>% serie accurate</span>
             <?php endif; ?>
             <?php if ($user['positive_series_bonus'] > 0): ?>
-                <span class="badge bg-success">
-                    +<?= $user['early_forecasts_bonus'] ?>% anticipo
-                </span>
+                <span class="badge bg-success">+<?= $user['early_forecasts_bonus'] ?>% anticipo</span>
             <?php endif; ?>
             <br>
 
-            <!-- Accuratezza -->
+            <!-- Punteggio -->
             <li>
                 <strong>Punteggio</strong>
                 <div class="accuracy-bar">
@@ -74,16 +69,76 @@
             </li>
 
             <li><hr class="dropdown-divider"></li>
-
-            <!-- Impostazioni -->
             <li>
                 <a class="dropdown-item text-center" href="<?= $baseUrl ?>/user_settings.php">⚙️ Impostazioni</a>
             </li>
-
             <li><hr class="dropdown-divider"></li>
-
-            <!-- Logout -->
             <li><a class="dropdown-item text-danger text-center fw-bold" href="<?= $baseUrl ?>/logout.php">Esci</a></li>
         </ul>
     </div>
 </div>
+
+<!-- ══════════════════════════════════════
+     BOTTOM NAVIGATION BAR (solo mobile)
+══════════════════════════════════════ -->
+<nav class="bottom-nav">
+
+    <!-- Bottone Menu a sinistra -->
+    <button class="bn-menu" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuSidebar">
+        <span class="bn-icon">☰</span>
+        <span>Menu</span>
+    </button>
+
+    <!-- Dropdown profilo a destra -->
+    <div class="dropdown bn-profile-wrap" style="flex:1; display:flex; align-items:stretch;">
+        <button class="bn-profile w-100" type="button"
+                id="userDropdownMobile" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="<?= htmlspecialchars($_SESSION['user']['picture']) ?>" alt="Foto profilo">
+            <span class="bn-label"><?= htmlspecialchars($user['full_name']) ?></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdownMobile">
+            <li class="user-info px-3 py-2">
+                <img src="<?= htmlspecialchars($_SESSION['user']['picture']) ?>" alt="Foto profilo">
+                <div>
+                    <strong><?= htmlspecialchars($user['full_name']) ?></strong>
+                    <div class="user-email"><?= htmlspecialchars($user['email']) ?></div>
+                </div>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li class="px-3 pb-2">
+                <strong>Accuratezza</strong>
+                <div class="accuracy-bar mt-1">
+                    <div class="accuracy-fill" style="width: <?= htmlspecialchars($user['total_accuracy']) ?>%;"></div>
+                </div>
+                <div class="text-center mt-1"><?= htmlspecialchars($user['total_accuracy']) ?>%</div>
+            </li>
+            <li class="px-3 pb-2">
+                <?php if ($user['consistency_bonus'] > 0): ?>
+                    <span class="badge bg-success">+<?= $user['consistency_bonus'] ?>% costanza</span>
+                <?php endif; ?>
+                <?php if ($user['positive_series_bonus'] > 0): ?>
+                    <span class="badge bg-success">+<?= $user['positive_series_bonus'] ?>% serie accurate</span>
+                <?php endif; ?>
+                <?php if ($user['positive_series_bonus'] > 0): ?>
+                    <span class="badge bg-success">+<?= $user['early_forecasts_bonus'] ?>% anticipo</span>
+                <?php endif; ?>
+            </li>
+            <li class="px-3 pb-2">
+                <strong>Punteggio</strong>
+                <div class="accuracy-bar mt-1">
+                    <div class="accuracy-fill" style="width: <?= htmlspecialchars($user['score']) ?>%;"></div>
+                </div>
+                <div class="text-center mt-1"><?= htmlspecialchars($user['score']) ?>/100</div>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <a class="dropdown-item text-center" href="<?= $baseUrl ?>/user_settings.php">⚙️ Impostazioni</a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <a class="dropdown-item text-danger text-center fw-bold" href="<?= $baseUrl ?>/logout.php">Esci</a>
+            </li>
+        </ul>
+    </div>
+
+</nav>

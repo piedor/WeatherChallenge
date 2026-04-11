@@ -81,8 +81,8 @@
         <link href="./favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
         <script src="./assets/dist/js/highcharts/highcharts.js"></script>
         <?php require_once './utils/style.php'; ?>
-        <link rel="stylesheet" href="./assets/css/style_app.css?v=2">
-        <link rel="stylesheet" href="./assets/css/style_dashboard.css?v=2">
+        <link rel="stylesheet" href="./assets/css/style_app.css?v=<?php echo filemtime('assets/css/style_app.css'); ?>">
+        <link rel="stylesheet" href="./assets/css/style_dashboard.css?v=<?php echo filemtime('assets/css/style_dashboard.css'); ?>">
         <style>
             .card-stat { transition: transform 0.2s; border: none; border-top: 4px solid; }
             .card-max { border-top-color: #dc3545; }
