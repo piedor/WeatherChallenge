@@ -2,7 +2,7 @@
     require 'assets/dist/google-client/vendor/autoload.php'; // Assicura di installare Google API Client con Composer
     require_once __DIR__ . '/lib/dotenv/vendor/autoload.php';
 
-    session_start(); 
+    require_once 'utils/session.php'; 
 
     header('Cache-Control: private, no-store, max-age=0');
 

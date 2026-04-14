@@ -1,5 +1,5 @@
 <?php
-    session_start();
+    require_once 'utils/session.php';
     session_unset();  // Rimuove tutte le variabili di sessione
     session_destroy();  // Distrugge la sessione attuale
     // Cancella il cookie della sessione

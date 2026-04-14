@@ -1,3 +1,11 @@
+<?php
+    require_once 'utils/session.php';
+    if (isset($_SESSION['user'])) {
+        header('Location: index.php');
+        exit;
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="it">
     <head>

@@ -1,13 +1,13 @@
 <?php
-    session_start();
-
-    header('Cache-Control: private, no-store, max-age=0');
-
     require 'assets/dist/google-client/vendor/autoload.php'; // Assicura di installare Google API Client con Composer
     // Include il file per la connessione al database
     include 'utils/db_connection.php';
     // Include il file per la gestione degli errori
     include 'utils/error_handler.php';
+
+    // Sessione sicura e persistente
+    require 'utils/session.php';
+    header('Cache-Control: private, no-store, max-age=0');
 
     $client = new Google\Client();
     $client->setClientId($_ENV['GOOGLE_CLIENT_ID']); // Sostituisci con l'ID client di Google
@@ -55,6 +55,12 @@
             $stmt = $__con->prepare($query);
             $stmt->bind_param("ssss", $googleId, $email, $name, $role);
             $stmt->execute();
+
+            // Distruggi sessione precedente
+            session_unset();
+            session_destroy();
+            session_start();
+            session_regenerate_id(true);
 
             // Salva i dati dell'utente nella sessione
             $_SESSION['user'] = [

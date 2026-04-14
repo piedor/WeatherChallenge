@@ -1,5 +1,5 @@
 <?php
-    session_start();
+    require_once 'utils/session.php';
 
     header('Cache-Control: private, no-store, max-age=0');
 
@@ -44,16 +44,4 @@
 
     $user_id = $user["id"];
     $role = $user["role"];
-
-    // Imposta un timeout per la sessione
-    if (!isset($_SESSION['last_activity'])) {
-        $_SESSION['last_activity'] = time();
-    } elseif (time() - $_SESSION['last_activity'] > 1800) { // Logout automatico dopo 30 minuti di inattività
-        session_destroy();
-        header("Location: /StazioneMeteo/dashboard/login.php?message=Sessione scaduta, rieffettua il login.");
-        exit;
-        
-    }
-    $_SESSION['last_activity'] = time(); // Aggiorna il tempo dell'ultima attività
-
 ?>
