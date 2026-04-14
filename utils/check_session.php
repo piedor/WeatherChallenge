@@ -44,4 +44,8 @@
 
     $user_id = $user["id"];
     $role = $user["role"];
+
+    $stmt = $__con->prepare("UPDATE users SET last_active = NOW() WHERE id = ?");
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
 ?>
