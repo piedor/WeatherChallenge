@@ -101,7 +101,7 @@
                     <h4 class="mb-0">Dati Reali - <?= date("d/m/Y", strtotime($forecast['date'])) ?></h4>
                 </div>
                 <div class="card-body">
-                    <div id="weatherChart" class="mb-4" style="width:100%; height:380px;"></div>
+                    <div id="weatherChart" class="mb-4" style="width:100%;"></div>
                     
                     <div class="row g-3">
                         <div class="col-4">
