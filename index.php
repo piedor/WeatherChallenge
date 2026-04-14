@@ -342,7 +342,7 @@
         </script>
 
         <!-- Intro.js tour -->
-        <script>
+        <!-- <script>
         document.addEventListener("DOMContentLoaded", function() {
             if (localStorage.getItem('hadTour')) return;
             setTimeout(function() {
@@ -367,7 +367,7 @@
                 intro.oncomplete(function() { localStorage.setItem('hadTour', true); }).start();
             }, 500);
         });
-        </script>
+        </script> -->
 
         <!-- Nuvole dinamiche -->
         <script>

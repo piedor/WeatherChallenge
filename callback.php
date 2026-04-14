@@ -29,10 +29,13 @@
             $role = '';
 
             $adminEmails = [trim($_ENV['ADMIN_EMAIL'])];
+            $specialEmails = array_map('trim', explode(',', $_ENV['SPECIAL_EMAILS']));
 
             // Determina il ruolo in base alla struttura dell'email
             if (in_array($email, $adminEmails)) {
                 $role = 'admin';
+            } elseif (in_array($email, $specialEmails)) {
+                $role = 'professor'; 
             } elseif (preg_match('/^[a-z]+\.[a-z]+@\s*liceodavincitn\.it$/i', $email)) {
                 $role = 'professor';
             } elseif (preg_match('/^[a-z]+\.[a-z]+\.\d{2}@\s*liceodavincitn\.it$/i', $email)) {
