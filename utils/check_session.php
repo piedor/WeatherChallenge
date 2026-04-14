@@ -1,5 +1,5 @@
 <?php
-    require_once 'utils/session.php';
+    require_once __DIR__ . '/session.php';
 
     header('Cache-Control: private, no-store, max-age=0');
 

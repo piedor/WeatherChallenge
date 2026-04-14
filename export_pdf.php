@@ -47,9 +47,9 @@
                     </div>
                     <div class="mb-3">
                         <label for="sintesi">Sintesi (opzionale):</label><br/>
-                        <textarea id="sintesi" name="sintesi" rows="4" placeholder="Inserisci una sintesi delle tue previsioni..."></textarea>
+                        <textarea id="sintesi" name="sintesi" rows="4" placeholder="Inserisci una sintesi delle tue previsioni..." style="width: 100%;"></textarea>
                     </div>
-                    <button type="button" class="btn btn-success" id="downloadPDF">📥 Scarica PDF</button>
+                    <button type="button" class="btn btn-success btn-bottom" id="downloadPDF">📥 Scarica PDF</button>
                 </form>
             </div>
         </div>

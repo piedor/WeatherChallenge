@@ -207,7 +207,7 @@
             </div>
         </div>
 
-        <a href="weather_sources_forecasts.php" class="btn btn-secondary mt-3 <?= '' ?>">← Torna all'elenco siti meteo</a>
+        <a href="weather_sources_forecasts.php" class="btn btn-secondary mt-3 btn-bottom">← Torna all'elenco siti meteo</a>
     </div>
 
     <script>

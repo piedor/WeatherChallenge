@@ -94,7 +94,7 @@
         <div class="cloud medium"></div>
         <div class="cloud large"></div>
 
-        <div class="container pt-2">
+        <div class="container">
             <div class="text-center">
                 <h1 class="dash-title" style="font-family:'Raleway',sans-serif;font-weight:bold;color:#333;">
                     📊 Dashboard

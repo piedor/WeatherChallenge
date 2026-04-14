@@ -239,7 +239,7 @@
             </div>
         </div>
 
-        <a href="students_forecasts.php" class="btn btn-secondary mt-3">← Torna all'elenco studenti</a>
+        <a href="students_forecasts.php" class="btn btn-secondary mt-3 btn-bottom">← Torna all'elenco studenti</a>
     </div>
 
     <script>

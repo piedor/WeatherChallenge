@@ -46,7 +46,7 @@
     </div>
     <?php endif; ?>
     
-    <div class="container pt-2 px-2">
+    <div class="container py-2 px-2">
         <h2 class="text-center mb-4">📋 Elenco Studenti - Classifica Accuratezza</h2>
         <ul class="list-group">
             <?php while ($row = $result->fetch_assoc()): ?>
@@ -59,7 +59,7 @@
             <?php endwhile; ?>
         </ul>
         <br>
-        <a href="api/generate_student_comparison_pdf.php" class="btn btn-outline-success mb-3">
+        <a href="api/generate_student_comparison_pdf.php" class="btn btn-outline-success btn-bottom">
             📥 Scarica PDF confronto studenti
         </a>
     </div>
