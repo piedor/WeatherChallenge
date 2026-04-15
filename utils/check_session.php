@@ -1,14 +1,6 @@
 <?php
     require_once __DIR__ . '/session.php';
 
-    header('Cache-Control: private, no-store, max-age=0');
-
-    // Rigenera ID sessione per maggiore sicurezza (ogni nuovo accesso)
-    if (!isset($_SESSION['regenerated'])) {
-        session_regenerate_id(true);
-        $_SESSION['regenerated'] = true;
-    }
-
     // Include la connessione al database
     require_once __DIR__ . '/db_connection.php';
 
