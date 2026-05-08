@@ -4,8 +4,6 @@
 
     require_once 'utils/session.php'; 
 
-    header('Cache-Control: private, no-store, max-age=0');
-
     $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
     $dotenv->load();
 

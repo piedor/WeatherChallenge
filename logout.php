@@ -1,5 +1,22 @@
 <?php
     require_once 'utils/session.php';
+    require_once 'utils/db_connection.php';
+
+    // Elimina il remember_token dal DB
+    if (isset($_COOKIE['remember_token'])) {
+        $token = $_COOKIE['remember_token'];
+        $stmt = $__con->prepare("DELETE FROM remember_tokens WHERE token = ?");
+        $stmt->bind_param("s", $token);
+        $stmt->execute();
+        setcookie('remember_token', '', [
+            'expires'  => time() - 3600,
+            'path'     => '/',
+            'secure'   => true,
+            'httponly' => true,
+            'samesite' => 'Lax'
+        ]);
+    }
+    
     session_unset();  // Rimuove tutte le variabili di sessione
     session_destroy();  // Distrugge la sessione attuale
     // Cancella il cookie della sessione
