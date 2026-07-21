@@ -2,6 +2,14 @@
     // Include il file per la connessione al database
     include 'utils/db_connection.php';
 
+    // Se passata via GET (es. ?date=2026-07-17), usa quella data.
+    // Altrimenti usa "ieri" come al solito (esecuzione cron normale).
+    if (isset($_GET['date']) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $_GET['date'])) {
+        $yesterday = $_GET['date'];
+    } else {
+        $yesterday = date('Y-m-d', strtotime('yesterday'));
+    }
+
     // Funzione per determinare l'accuratezza della temperatura prevista da quella reale data una soglia
     function calculateTemperatureAccuracy($forecastMin, $forecastMax, $realMin, $realMax, $threshold = 10.0) {
         $errorMin = abs($forecastMin - $realMin);
@@ -13,9 +21,6 @@
         
         return round(($accuracyMin + $accuracyMax) / 2, 2); // Media delle due accuratezze
     }
-
-    // Recupera la data di ieri
-    $yesterday = date('Y-m-d', strtotime('yesterday'));
 
     // Chiamata API per temperatura giornalieri di ieri
     $baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]";
@@ -82,7 +87,6 @@
     $stmt->close();
 
     // Ottieni le previsioni degli studenti per il giorno precedente
-    $yesterday = date('Y-m-d', strtotime('yesterday'));
     $query = "SELECT id, user_id, temp_max, temp_min, morning_desc, afternoon_desc FROM forecasts WHERE date = ?";
     $stmt = $__con->prepare($query);
     $stmt->bind_param("s", $yesterday);
@@ -337,7 +341,6 @@
     }
 
     // Calcola accuratezza meteo ufficiali
-    $yesterday = date('Y-m-d', strtotime('yesterday'));
     $query = "SELECT * FROM weather_sources_forecasts WHERE date = ?";
     $stmt = $__con->prepare($query);
     $stmt->bind_param("s", $yesterday);
