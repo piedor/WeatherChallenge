@@ -55,13 +55,13 @@
 
     // Logica recupero Temperature Reali (Stazione o OpenMeteo)
     $baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]";
-    $apiUrl = "$baseUrl/StazioneMeteo/dashboard/api/get_temperatures_station.php?interval=hourly&date=" . $date;
+    $apiUrl = "$baseUrl/dashboard/api/get_temperatures_station.php?interval=hourly&date=" . $date;
     $response = file_get_contents($apiUrl);
     $temperatureData = json_decode($response);
     
     if (!isset($temperatureData->message)) {
         $temperatures = array_map(fn($t) => round($t, 1), $temperatureData->data[3]->values->avg ?? []);
-        $apiUrlDaily = "$baseUrl/StazioneMeteo/dashboard/api/get_temperatures_station.php?interval=daily&date=" . $date;
+        $apiUrlDaily = "$baseUrl/dashboard/api/get_temperatures_station.php?interval=daily&date=" . $date;
         $dataD = json_decode(file_get_contents($apiUrlDaily));
         $realTempAvg = round($dataD->data[3]->values->avg[0], 1);
         $realTempMax = round($dataD->data[3]->values->max[0], 1);
@@ -78,7 +78,7 @@
     }
 
     // Calcolo accuratezza tramite API
-    $apiUrlAcc = "$baseUrl/StazioneMeteo/dashboard/api/calculate_weather_accuracy.php";
+    $apiUrlAcc = "$baseUrl/dashboard/api/calculate_weather_accuracy.php";
     $postData = ["weather_codes" => $weatherCodes, "morning_desc" => $forecast['morning_desc'], "afternoon_desc" => $forecast['afternoon_desc']];
     $options = ["http" => ["header" => "Content-Type: application/json\r\n", "method" => "POST", "content" => json_encode($postData)]];
     $accuracyData = json_decode(file_get_contents($apiUrlAcc, false, stream_context_create($options)), true);

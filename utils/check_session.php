@@ -38,11 +38,11 @@
             } else {
                 // Token non valido o scaduto → cancella cookie
                 setcookie('remember_token', '', time() - 3600, '/', '', true, true);
-                header('Location: /StazioneMeteo/dashboard/login.php');
+                header('Location: /dashboard/login.php');
                 exit;
             }
         } else {
-            header('Location: /StazioneMeteo/dashboard/login.php');
+            header('Location: /dashboard/login.php');
             exit;
         }
     }
@@ -70,7 +70,7 @@
         // Se l'utente non esiste, distruggi la sessione e reindirizza al login
         session_destroy();
         setcookie('remember_token', '', time() - 3600, '/');
-        header('Location: /StazioneMeteo/dashboard/login.php');
+        header('Location: /dashboard/login.php');
         exit;
     }
 

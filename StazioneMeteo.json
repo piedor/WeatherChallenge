@@ -1,6 +1,6 @@
 {
     "name": "StazioneMeteo",
-    "baseUrl": "/StazioneMeteo/dashboard",
+    "baseUrl": "/dashboard",
     "debugError": 1,
     "weatherDescToEmoji": {
         "Soleggiato": "☀️",

@@ -6,7 +6,7 @@
 
 <link rel="stylesheet" href="../assets/css/style.css"/>
 <!-- PWA - Manifest -->
-<link rel="manifest" href="/StazioneMeteo/dashboard/manifest.json">
+<link rel="manifest" href="/dashboard/manifest.json">
 
 <!-- Theme Color -->
 <meta name="theme-color" content="#f8c63a">
@@ -18,7 +18,7 @@
 <script>
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/StazioneMeteo/dashboard/sw.js')
+            navigator.serviceWorker.register('/dashboard/sw.js')
                 .then((registration) => {
                     console.log('Service Worker registrato con successo:', registration.scope);
                 })
