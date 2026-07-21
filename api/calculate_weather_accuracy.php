@@ -27,12 +27,30 @@
         $totalCodes = count($weatherCodes);
         $frequencies = array_count_values($weatherCodes);
 
+        // ── REGOLA SPECIALE TEMPORALI ──────────────────────────────────────────
+        // Codici WMO temporale: 95 (temporale), 96 (con grandine leggera), 99 (con grandine)
+        // Anche una sola occorrenza rende valida la previsione "Temporale",
+        // perché i temporali sono eventi brevi e intensi che i modelli sottostimano.
+        $thunderCodes = [95, 96, 99];
+        $hasThunder = false;
+        foreach ($thunderCodes as $tc) {
+            if (isset($frequencies[$tc]) && $frequencies[$tc] >= 1) {
+                $hasThunder = true;
+                break;
+            }
+        }
+        
         $descGroups = [];
 
         // Filtra codici sopra la soglia e raggruppa per descrizione
         foreach ($frequencies as $code => $frequency) {
             $presence = $frequency / $totalCodes;
-            if ($presence >= $threshold && isset($wmoCodeToDescEmoji[$code])) {
+
+            // Per i codici temporale, la soglia è 0 se hasThunder è true:
+            // basta anche solo 1 occorrenza per renderli validi
+            $effectiveThreshold = ($hasThunder && in_array($code, $thunderCodes)) ? 0 : $threshold;
+
+            if ($presence >= $effectiveThreshold && isset($wmoCodeToDescEmoji[$code])) {
                 $desc = $wmoCodeToDescEmoji[$code][0];
                 $descGroups[$desc]['codes'][$code] = $frequency;
                 $descGroups[$desc]['total'] = ($descGroups[$desc]['total'] ?? 0) + $frequency;
@@ -47,7 +65,7 @@
         // Crea lista finale dei codici dominanti, ordinati
         $dominantCodes = [];
         foreach ($descGroups as $group) {
-            arsort($group['codes']); // opzionale: ordina codici nello stesso gruppo per frequenza
+            arsort($group['codes']); // ordina codici nello stesso gruppo per frequenza
             foreach ($group['codes'] as $code => $_) {
                 $dominantCodes[] = $code;
             }
@@ -120,8 +138,8 @@
                 $index === count($result) - 1 ||
                 (isset($result[$index + 1]) && $result[$index + 1] === "")
             ));
-        }, ARRAY_FILTER_USE_BOTH);        
-        // restituisci
+        }, ARRAY_FILTER_USE_BOTH);
+
         return $result;
     }
 
@@ -144,7 +162,6 @@
     
         return 0; // Emoji non trovata
     }
-    
 
     // Filtra i dati per mattina (5:00-12:00) e pomeriggio (12:00-20:00)
     $morningCodes = array_slice($weatherCodes, 5, 7);  // Ore 5:00 - 11:00 (7 valori)
@@ -154,7 +171,7 @@
     $morningConditions = getDominantConditions($morningCodes, $validWeatherEmojiFromWmoCode, $wmoCodeToDescEmoji);
     $afternoonConditions = getDominantConditions($afternoonCodes, $validWeatherEmojiFromWmoCode, $wmoCodeToDescEmoji);
 
-    // Mappa inversa (icone → descrizioni) (icone meteo)
+    // Mappa inversa (icone → descrizioni)
     $iconToDescription = array_flip($weatherDescToEmoji);
 
     // Converti icone in descrizioni testuali
@@ -175,7 +192,7 @@
     // Calcola l'accuratezza per il pomeriggio
     $afternoonAccuracy += calculateAccuracy($weatherDescToEmoji[$afternoonDesc], $afternoonConditions);
 
-     // Rimuove elementi vuoti
+    // Rimuove elementi vuoti
     $morningConditionsText = array_filter($morningConditionsText, function ($icon) {
         return $icon !== "Sconosciuto";
     });
