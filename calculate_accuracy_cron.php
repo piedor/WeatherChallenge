@@ -24,7 +24,7 @@
 
     // Chiamata API per temperatura giornalieri di ieri
     $baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]";
-    $apiUrl = "$baseUrl/StazioneMeteo/dashboard/api/get_temperatures_station.php?interval=daily&date=" . $yesterday;
+    $apiUrl = "$baseUrl/dashboard/api/get_temperatures_station.php?interval=daily&date=" . $yesterday;
     $response = file_get_contents($apiUrl);
     $data = json_decode($response); // Decodifica il JSON
     // Se la risposta non contiene "message":"No data for period...", significa che abbiamo dati
@@ -58,33 +58,48 @@
         $realTempMin = round($data->daily->temperature_2m_min[0], 1);
     }
 
-    // Ottieni i dati meteo dal giorno precedente
-    $latitude = "46.0679"; // Inserire la latitudine corretta
-    $longitude = "11.1211"; // Inserire la longitudine corretta
-    $apiUrl = "https://api.open-meteo.com/v1/forecast?latitude=$latitude&longitude=$longitude&hourly=weather_code&timezone=Europe%2FBerlin&past_days=1&forecast_days=0";
+    // Recupera i weather codes dal DB per la data specificata
+    $wcQuery = "SELECT weather_codes FROM weather_codes WHERE date = ?";
+    $wcStmt = $__con->prepare($wcQuery);
+    $wcStmt->bind_param("s", $yesterday);
+    $wcStmt->execute();
+    $wcResult = $wcStmt->get_result();
+    $wcRow = $wcResult->fetch_assoc();
+    $wcStmt->close();
 
-    $response = file_get_contents($apiUrl);
-    $data = json_decode($response, true);
+    if ($wcRow) {
+        // Usa i weather codes già salvati nel DB
+        $hourlyCodes = json_decode($wcRow['weather_codes'], true);
+        $weather_codes_json = $wcRow['weather_codes'];
+    } else {
+        // Fallback: recupera da Open-Meteo con la data corretta
+        $latitude = "46.0679"; // Inserire la latitudine corretta
+        $longitude = "11.1211"; // Inserire la longitudine corretta
+        $apiUrl = "https://api.open-meteo.com/v1/forecast?latitude=$latitude&longitude=$longitude&hourly=weather_code&timezone=Europe%2FBerlin&past_days=1&forecast_days=0";
 
-    if (!$data || empty($data['hourly']['weather_code'])) {
-        die("Errore nel recupero dei dati meteo");
+        $response = file_get_contents($apiUrl);
+        $data = json_decode($response, true);
+
+        if (!$data || empty($data['hourly']['weather_code'])) {
+            die("Errore nel recupero dei dati meteo");
+        }
+
+        // Codici meteo
+        $hourlyCodes = $data['hourly']['weather_code'];
+        $timestamps = $data['hourly']['time'];
+
+        // Salva i codici meteo nel database
+        $date = date('Y-m-d', strtotime($timestamps[0])); // Usa la prima data come riferimento
+        $weather_codes_json = json_encode($hourlyCodes); // Converti in JSON
+
+        // Inserisci o aggiorna i dati nel database
+        $query = "INSERT INTO weather_codes (date, weather_codes) VALUES (?, ?) 
+        ON DUPLICATE KEY UPDATE weather_codes = VALUES(weather_codes)";
+        $stmt = $__con->prepare($query);
+        $stmt->bind_param("ss", $date, $weather_codes_json);
+        $stmt->execute();
+        $stmt->close();
     }
-
-    // Codici meteo
-    $hourlyCodes = $data['hourly']['weather_code'];
-    $timestamps = $data['hourly']['time'];
-
-    // Salva i codici meteo nel database
-    $date = date('Y-m-d', strtotime($timestamps[0])); // Usa la prima data come riferimento
-    $weather_codes_json = json_encode($hourlyCodes); // Converti in JSON
-
-    // Inserisci o aggiorna i dati nel database
-    $query = "INSERT INTO weather_codes (date, weather_codes) VALUES (?, ?) 
-    ON DUPLICATE KEY UPDATE weather_codes = VALUES(weather_codes)";
-    $stmt = $__con->prepare($query);
-    $stmt->bind_param("ss", $date, $weather_codes_json);
-    $stmt->execute();
-    $stmt->close();
 
     // Ottieni le previsioni degli studenti per il giorno precedente
     $query = "SELECT id, user_id, temp_max, temp_min, morning_desc, afternoon_desc FROM forecasts WHERE date = ?";
@@ -94,7 +109,7 @@
     $result = $stmt->get_result();
 
     // Chiamata API per calcolo accuratezza METEO in base ai codici meteo reali e alle previsioni dell'utente
-    $apiUrl = "$baseUrl/StazioneMeteo/dashboard/api/calculate_weather_accuracy.php";
+    $apiUrl = "$baseUrl/dashboard/api/calculate_weather_accuracy.php";
 
     // Array per memorizzare gli user_id con cambiamenti nell'accuratezza
     $userAccurancyChanged = [];
