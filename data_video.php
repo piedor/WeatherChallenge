@@ -76,6 +76,85 @@
             return;
         }
 
+        // Modalità fallback (nessuno studente, solo Open-Meteo)
+        const isFallback = forecasts.every(f => f.role === 'source');
+
+        if (isFallback) {
+            container.innerHTML = `
+                <div class="alert alert-warning text-center mb-3" role="alert">
+                    ⚠️ Nessuna previsione degli studenti disponibile. Visualizzazione previsioni <strong>Open-Meteo</strong>.
+                </div>
+            `;
+
+            const card = document.createElement('div');
+            card.className = 'student-card';
+
+            card.innerHTML = `
+                <div class="student-header">
+                    <div class="student-medal">🌐</div>
+                    <div class="student-meta">
+                        <div class="student-name">Open-Meteo</div>
+                    </div>
+                </div>
+            `;
+
+            const grid = document.createElement('div');
+            grid.className = 'forecast-grid';
+            const dates = getNextFiveDates();
+
+            dates.forEach(({ date, day }, i) => {
+                const f    = forecasts.find(x => x.date === date);
+                const cell = document.createElement('div');
+                cell.style.animationDelay = `${i * 0.05}s`;
+
+                if (f) {
+                    cell.className = 'forecast-cell';
+                    cell.innerHTML = `
+                        <div class="fc-day">${day}</div>
+                        <div class="fc-date">${date}</div>
+                        <div class="fc-weather-row">
+                            <div class="fc-period morning">
+                                <span class="fc-period-label">Matt</span>
+                                <span class="fc-period-icon">${getIcon(f.morning_desc)}</span>
+                            </div>
+                            <div class="fc-period afternoon">
+                                <span class="fc-period-label">Pom</span>
+                                <span class="fc-period-icon">${getIcon(f.afternoon_desc)}</span>
+                            </div>
+                        </div>
+                        <div class="fc-temp">
+                            <span class="tmax">↑${f.temp_max}°</span>
+                            <span class="tmin"> ↓${f.temp_min}°</span>
+                        </div>
+                    `;
+                } else {
+                    cell.className = 'forecast-cell empty';
+                    cell.innerHTML = `
+                        <div class="fc-day">${day}</div>
+                        <div class="fc-date">${date}</div>
+                        <div class="fc-weather-row">
+                            <div class="fc-period morning">
+                                <span class="fc-period-label">Matt</span>
+                                <span class="fc-period-icon">📭</span>
+                            </div>
+                            <div class="fc-period afternoon">
+                                <span class="fc-period-label">Pom</span>
+                                <span class="fc-period-icon">📭</span>
+                            </div>
+                        </div>
+                    `;
+                }
+                grid.appendChild(cell);
+            });
+
+            card.appendChild(grid);
+            container.appendChild(card);
+
+            document.getElementById('last-update').textContent =
+                'Aggiornato alle ' + new Date().toLocaleTimeString('it-IT');
+            return;
+        }
+
         const grouped = groupByStudent(forecasts);
         const dates   = getNextFiveDates();
         let rank = 1;

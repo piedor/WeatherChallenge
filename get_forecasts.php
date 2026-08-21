@@ -45,5 +45,33 @@
 
     // Restituisce i dati in formato JSON
     header('Content-Type: application/json');
-    echo json_encode($forecasts);
+
+    if (!empty($forecasts)) {
+        echo json_encode($forecasts);
+    } else {
+        // Fallback: previsioni Open-Meteo salvate nel DB (weather_source_id = 2)
+        $fallback_query = "SELECT 
+            DATE_FORMAT(date, '%d/%m/%Y') AS date,
+            temp_max,
+            temp_min,
+            morning_desc,
+            afternoon_desc,
+            NULL AS note,
+            'Open-Meteo' AS full_name,
+            NULL AS total_accuracy,
+            NULL AS score,
+            'source' AS role
+        FROM weather_sources_forecasts
+        WHERE weather_source_id = 2
+          AND date >= CURDATE()
+        ORDER BY date ASC
+        LIMIT 5";
+
+        $fallback_stmt = $__con->prepare($fallback_query);
+        $fallback_stmt->execute();
+        $fallback_result = $fallback_stmt->get_result();
+        $fallback_forecasts = $fallback_result->fetch_all(MYSQLI_ASSOC);
+
+        echo json_encode($fallback_forecasts);
+    }
 ?>
